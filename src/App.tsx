@@ -1,27 +1,47 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import MonacoEditor from 'react-monaco-editor';
+import SnippetTable from './Components/Sidebar/SnippetTable';
+import { ISnippet } from './Components/Model/ISnippet';
 
 class App extends Component {
-  render() {
+  public render() {
+    const options = {
+      selectOnLineNumbers: true
+    };
+
+    const snippets: ISnippet[] = [];
+    snippets.push({ title: "Example!" });
+    snippets.push({ title: "Example!" });
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className={"bp3-dark"}>
+        <SnippetTable
+          className="sidebar"
+          snippets={snippets}
+        />
+        <div className="editor">
+          <MonacoEditor
+            width="100%"
+            height="600"
+            language="javascript"
+            theme="vs-dark"
+            options={options}
+            value='function funct() { console.log("hello world"); }'
+          // onChange={this.onChange}
+          // editorDidMount={this.editorDidMount}
+          />
+        </div>
       </div>
     );
+  }
+
+  private onChange = () => {
+
+  }
+
+  private editorDidMount = () => {
+
   }
 }
 
