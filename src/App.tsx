@@ -6,6 +6,7 @@ import { ResizeSensor, IResizeEntry } from '@blueprintjs/core';
 
 import styles from "./App.module.scss";
 import classNames from 'classnames';
+import uuid from "uuid";
 
 interface IAppProps {
 
@@ -14,16 +15,55 @@ interface IAppProps {
 interface IAppState {
   height: number;
   width: number;
+  selectedSnippet?: ISnippet | null;
 }
 
 class App extends Component<IAppProps, IAppState> {
 
   private rootContainerRef: React.RefObject<HTMLDivElement>;
 
+  private snippets: ISnippet[];
+
   constructor(props: IAppProps) {
     super(props);
 
     this.rootContainerRef = React.createRef();
+    this.state = {
+      height: 0,
+      width: 0,
+      selectedSnippet: null
+    }
+
+
+
+    this.snippets = [];
+    this.snippets.push(
+      {
+        title: "Example!",
+        language: "cpp",
+        description: "",
+        body: `#include <iostream>
+using namespace std;
+
+int main() 
+{
+    cout << "Hello, World!";
+    return 0;
+}`,
+        uuid: uuid.v4()
+      }
+    );
+    this.snippets.push(
+      {
+        title: "Example!",
+        language: "javascript",
+        description: "",
+        body: `function funct() { 
+  console.log("hello world"); 
+}`,
+        uuid: uuid.v4()
+      }
+    );
   }
 
   public componentDidMount() {
@@ -37,10 +77,6 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
 
-    const snippets: ISnippet[] = [];
-    snippets.push({ title: "Example!", language: "c++", description: "", body: "" });
-    snippets.push({ title: "Example!", language: "js", description: "", body: "" });
-
     return (
       <ResizeSensor onResize={this.handleResize}>
         <div
@@ -49,9 +85,14 @@ class App extends Component<IAppProps, IAppState> {
         >
           <SnippetTable
             className="sidebar"
-            snippets={snippets}
+            onSelectSnippet={this.onSelectSnippet}
+            selectedSnippet={this.state.selectedSnippet}
+            snippets={this.snippets}
           />
-          <Editor height={this.state != null ? this.state.height : 100} />
+          <Editor
+            height={this.state != null ? this.state.height : 100}
+            selectedSnippet={this.state.selectedSnippet}
+          />
         </div>
       </ResizeSensor>
     );
@@ -65,12 +106,11 @@ class App extends Component<IAppProps, IAppState> {
     });
   }
 
-  private onChange = () => {
-
-  }
-
-  private editorDidMount = () => {
-
+  private onSelectSnippet = (snippet: ISnippet) => {
+    // alert("HELLLLLLOOOO");
+    this.setState({
+      selectedSnippet: snippet
+    })
   }
 }
 

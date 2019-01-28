@@ -5,4 +5,5 @@ export interface ISnippet {
   description: string;
   language: string;
   title: string;
+  uuid: string;
 }

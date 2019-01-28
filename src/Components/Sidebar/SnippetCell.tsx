@@ -6,6 +6,7 @@ import styles from "./SnippetCell.module.scss";
 import classNames from "classnames";
 
 interface ISnippetCellProps {
+  onCellSelected?: any;
   selected: boolean;
   snippet: ISnippet;
 }
@@ -18,10 +19,13 @@ export default class SnippetCell extends Component<ISnippetCellProps, ISnippetCe
 
   public render() {
     return (
-      <div className={classNames(styles["snippet-cell"], {[styles["selected"]] : this.props.selected})}>
+      <div
+        className={classNames(styles["snippet-cell"], { [styles["selected"]]: this.props.selected })}
+        onClick={this.props.onCellSelected}
+      >
         <H3>{this.props.snippet.title}</H3>
         <p>{this.props.snippet.language}</p>
-      </div>
+      </div >
     );
   }
 }
