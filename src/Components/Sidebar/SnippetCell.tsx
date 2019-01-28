@@ -1,8 +1,13 @@
 import React, { Component } from "react";
-import { Card, H2 } from '@blueprintjs/core';
+import { H3 } from '@blueprintjs/core';
+import { ISnippet } from '../../Model/ISnippet';
+
+import styles from "./SnippetCell.module.scss";
+import classNames from "classnames";
 
 interface ISnippetCellProps {
-  title: string;
+  selected: boolean;
+  snippet: ISnippet;
 }
 
 interface ISnippetCellState {
@@ -13,11 +18,10 @@ export default class SnippetCell extends Component<ISnippetCellProps, ISnippetCe
 
   public render() {
     return (
-      <Card
-        interactive={true}
-      >
-        <H2>{this.props.title}</H2>
-      </Card>
+      <div className={classNames(styles["snippet-cell"], {[styles["selected"]] : this.props.selected})}>
+        <H3>{this.props.snippet.title}</H3>
+        <p>{this.props.snippet.language}</p>
+      </div>
     );
   }
 }

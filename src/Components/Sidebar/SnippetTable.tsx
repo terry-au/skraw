@@ -1,7 +1,10 @@
 import React, { Component } from "react";
-import { ISnippet } from "../Model/ISnippet";
+import { ISnippet } from "../../Model/ISnippet";
 import SnippetCell from './SnippetCell';
 import { InputGroup, Button, Icon } from "@blueprintjs/core";
+
+import styles from "./SnippetTable.module.scss";
+import SearchBar from "../Widgets/SearchBar";
 
 interface ISnippetTableProps {
   className?: string;
@@ -17,7 +20,6 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
   constructor(props: Readonly<ISnippetTableProps>) {
     super(props);
 
-
     this.state = {
       searchTerm: ""
     };
@@ -25,47 +27,25 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
 
   public render() {
     return (
-      <div className={this.props.className}>
-        <InputGroup
-          leftIcon="search"
-          value={this.state.searchTerm}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            return this.setState({ searchTerm: e.target.value });
-          }}
-          rightElement={
-            (this.state.searchTerm
-              ?
-              <Button
-                minimal={true}
-                icon="cross"
-                onClick={this.clearSearchTerm}
-              />
-              :
-              undefined
-            )
-          }
-        />
-        {this.snippetElements()}
+      <div className={styles["table"]}>
+        <div className={styles["header"]}>
+          <SearchBar searchTerm=""/>
+        </div>
+        <div className={styles["body"]}>
+          {this.snippetElements(this.state.searchTerm)}
+        </div>
       </div>
     );
   }
 
-  private snippetElements = (): JSX.Element[] => {
+  private snippetElements = (filter: string): JSX.Element[] => {
     const snippets: JSX.Element[] = [];
-    this.props.snippets.forEach(element => {
+    this.props.snippets.forEach(snippet => {
       const cell = (
-        <SnippetCell title={element.title} />
+        <SnippetCell selected={true} snippet={snippet} />
       )
       snippets.push(cell);
     });
     return snippets;
-  }
-
-  private clearSearchTerm = () => {
-    this.setState(
-      {
-        searchTerm: ""
-      }
-    );
   }
 }

@@ -1,0 +1,16 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.table {
+  padding: $pt-grid-size;
+  background-color: $pt-dark-app-background-color;
+  float: left;
+  width: 20%;
+}
+
+.header {
+
+}
+
+.body {
+  margin-top: $pt-grid-size;
+}

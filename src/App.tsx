@@ -1,39 +1,68 @@
 import React, { Component } from 'react';
-import './App.css';
-import MonacoEditor from 'react-monaco-editor';
 import SnippetTable from './Components/Sidebar/SnippetTable';
-import { ISnippet } from './Components/Model/ISnippet';
+import { ISnippet } from './Model/ISnippet';
+import Editor from './Components/Editor/Editor';
+import { ResizeSensor, IResizeEntry } from '@blueprintjs/core';
 
-class App extends Component {
+import styles from "./App.module.scss";
+import classNames from 'classnames';
+
+interface IAppProps {
+
+}
+
+interface IAppState {
+  height: number;
+  width: number;
+}
+
+class App extends Component<IAppProps, IAppState> {
+
+  private rootContainerRef: React.RefObject<HTMLDivElement>;
+
+  constructor(props: IAppProps) {
+    super(props);
+
+    this.rootContainerRef = React.createRef();
+  }
+
+  public componentDidMount() {
+    this.setState({ height: 100 });
+  }
+
+  public componentDidUpdate(prevProps: IAppProps, prevState: IAppState) {
+    console.log("CDU");
+    console.log((this.rootContainerRef as any).clientHeight);
+  }
+
   public render() {
-    const options = {
-      selectOnLineNumbers: true
-    };
 
     const snippets: ISnippet[] = [];
-    snippets.push({ title: "Example!" });
-    snippets.push({ title: "Example!" });
+    snippets.push({ title: "Example!", language: "c++", description: "", body: "" });
+    snippets.push({ title: "Example!", language: "js", description: "", body: "" });
 
     return (
-      <div className={"bp3-dark"}>
-        <SnippetTable
-          className="sidebar"
-          snippets={snippets}
-        />
-        <div className="editor">
-          <MonacoEditor
-            width="100%"
-            height="600"
-            language="javascript"
-            theme="vs-dark"
-            options={options}
-            value='function funct() { console.log("hello world"); }'
-          // onChange={this.onChange}
-          // editorDidMount={this.editorDidMount}
+      <ResizeSensor onResize={this.handleResize}>
+        <div
+          className={classNames("bp3-dark", styles["root-container"])}
+          ref={this.rootContainerRef}
+        >
+          <SnippetTable
+            className="sidebar"
+            snippets={snippets}
           />
+          <Editor height={this.state != null ? this.state.height : 100} />
         </div>
-      </div>
+      </ResizeSensor>
     );
+  }
+
+  private handleResize = (entries: IResizeEntry[]) => {
+    const resizeEntry: IResizeEntry = entries[entries.length - 1];
+    this.setState({
+      height: resizeEntry.contentRect.height,
+      width: resizeEntry.contentRect.width,
+    });
   }
 
   private onChange = () => {
