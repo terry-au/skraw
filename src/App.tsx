@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SnippetTable from './Components/Sidebar/SnippetTable';
-import { ISnippet } from './Model/ISnippet';
+import { ISnippet } from './Models/ISnippet';
 import Editor from './Components/Editor/Editor';
 import { ResizeSensor, IResizeEntry } from '@blueprintjs/core';
 
@@ -68,11 +68,6 @@ int main()
 
   public componentDidMount() {
     this.setState({ height: 100 });
-  }
-
-  public componentDidUpdate(prevProps: IAppProps, prevState: IAppState) {
-    console.log("CDU");
-    console.log((this.rootContainerRef as any).clientHeight);
   }
 
   public render() {

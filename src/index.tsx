@@ -3,6 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import createStoreWithMiddleware from './redux/configureStore';
+import { selectSnippet } from './redux/reducers/skraw';
+
+const store = createStoreWithMiddleware();
+store.dispatch(selectSnippet('Learn about actions'))
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

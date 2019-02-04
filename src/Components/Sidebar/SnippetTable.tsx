@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ISnippet } from "../../Model/ISnippet";
+import { ISnippet } from "../../Models/ISnippet";
 import SnippetCell from './SnippetCell';
 import { InputGroup, Button, Icon } from "@blueprintjs/core";
 
@@ -45,10 +45,6 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
   private snippetElements = (filter: string): JSX.Element[] => {
     const snippets: JSX.Element[] = [];
     this.props.snippets.forEach(snippet => {
-      console.log(this.state.selectedSnippet);
-      console.log(snippet);
-      console.log(this.state.selectedSnippet === snippet);
-
       let isSelected = false;
       if (this.state.selectedSnippet) {
         isSelected = (this.state.selectedSnippet as ISnippet).uuid == snippet.uuid;
@@ -70,7 +66,6 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
 
   private onCellSelected = (snippet: ISnippet) => {
     this.setState({ selectedSnippet: snippet });
-    console.log(snippet);
 
     if (this.props.onSelectSnippet) {
       this.props.onSelectSnippet(snippet);

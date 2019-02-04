@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { H3 } from '@blueprintjs/core';
-import { ISnippet } from '../../Model/ISnippet';
+import { ISnippet } from '../../Models/ISnippet';
 
 import styles from "./SnippetCell.module.scss";
 import classNames from "classnames";
