@@ -7,6 +7,9 @@
   padding: $pt-grid-size;
   border-radius: $pt-grid-size / 2;
   transition: background-color 100ms ease-in-out;
+}
+
+.snippet-cell:nth-child(n+2) {
   margin-top: $pt-grid-size / 2;
 }
 

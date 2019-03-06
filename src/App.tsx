@@ -6,7 +6,8 @@ import { ResizeSensor, IResizeEntry } from '@blueprintjs/core';
 
 import styles from "./App.module.scss";
 import classNames from 'classnames';
-import uuid from "uuid";
+import DummyData from './DummyData';
+
 
 interface IAppProps {
 
@@ -37,33 +38,12 @@ class App extends Component<IAppProps, IAppState> {
 
 
     this.snippets = [];
-    this.snippets.push(
-      {
-        title: "Example!",
-        language: "cpp",
-        description: "",
-        body: `#include <iostream>
-using namespace std;
 
-int main() 
-{
-    cout << "Hello, World!";
-    return 0;
-}`,
-        uuid: uuid.v4()
-      }
-    );
-    this.snippets.push(
-      {
-        title: "Example!",
-        language: "javascript",
-        description: "",
-        body: `function funct() { 
-  console.log("hello world"); 
-}`,
-        uuid: uuid.v4()
-      }
-    );
+    for (let index = 0; index < 20; index++) {
+      const rnd = Math.floor(Math.random() * 2);
+      const ob = rnd === 0 ? DummyData.js() : DummyData.cpp();
+      this.snippets.push(ob);
+    }
   }
 
   public componentDidMount() {
@@ -79,7 +59,7 @@ int main()
           ref={this.rootContainerRef}
         >
           <SnippetTable
-            className="sidebar"
+            className={styles["sidebar"]}
             onSelectSnippet={this.onSelectSnippet}
             selectedSnippet={this.state.selectedSnippet}
             snippets={this.snippets}

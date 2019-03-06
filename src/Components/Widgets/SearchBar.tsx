@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { InputGroup, Button } from "@blueprintjs/core";
+import { string } from "prop-types";
 
 interface ISearchBarProps {
   onSearchTermChange?: any;
-  searchTerm: string;
+  searchTerm?: string;
+  className?: string;
+  placeholder?: string;
 }
 
 interface ISearchBarState {
@@ -24,9 +27,11 @@ export default class SearchBar extends Component<ISearchBarProps, ISearchBarStat
   public render() {
     return (
       <InputGroup
+        className={this.props.className}
         leftIcon="search"
         value={this.state.searchTerm}
         onChange={this.onSearchTermChange}
+        placeholder={this.props.placeholder}
         rightElement={
           (this.state.searchTerm
             ?

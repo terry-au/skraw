@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { ISnippet } from "../../Models/ISnippet";
 import SnippetCell from './SnippetCell';
-import { InputGroup, Button, Icon } from "@blueprintjs/core";
 
 import styles from "./SnippetTable.module.scss";
 import SearchBar from "../Widgets/SearchBar";
+import { Button, ResizeSensor, IResizeEntry } from '@blueprintjs/core';
 
 interface ISnippetTableProps {
   className?: string;
@@ -16,6 +16,8 @@ interface ISnippetTableProps {
 interface ISnippetTableState {
   searchTerm: string;
   selectedSnippet?: ISnippet | null;
+  width: number;
+  height: number;
 }
 
 export default class SnippetTable extends Component<ISnippetTableProps, ISnippetTableState> {
@@ -25,7 +27,9 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
 
     this.state = {
       searchTerm: "",
-      selectedSnippet: props.selectedSnippet
+      selectedSnippet: props.selectedSnippet,
+      width: 0,
+      height: 0
     };
   }
 
@@ -33,10 +37,13 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
     return (
       <div className={styles["table"]}>
         <div className={styles["header"]}>
-          <SearchBar searchTerm="" />
+          <SearchBar className={styles["search-field"]} placeholder="Search for a snippet..." />
+          <Button className={styles["add-button"]} minimal={true} icon="insert" />
         </div>
-        <div className={styles["body"]}>
-          {this.snippetElements(this.state.searchTerm)}
+        <div>
+          <div className={styles["body"]}>
+            {this.snippetElements(this.state.searchTerm)}
+          </div>
         </div>
       </div>
     );
@@ -62,6 +69,15 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
       snippets.push(cell);
     });
     return snippets;
+  }
+
+
+  private handleTableResize = (entries: IResizeEntry[]) => {
+    const resizeEntry: IResizeEntry = entries[entries.length - 1];
+    this.setState({
+      height: resizeEntry.contentRect.height,
+      width: resizeEntry.contentRect.width,
+    });
   }
 
   private onCellSelected = (snippet: ISnippet) => {
