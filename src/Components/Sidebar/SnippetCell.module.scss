@@ -7,6 +7,7 @@
   padding: $pt-grid-size;
   border-radius: $pt-grid-size / 2;
   transition: background-color 100ms ease-in-out;
+  margin-right: 0.70vw;
 }
 
 .snippet-cell:nth-child(n+2) {

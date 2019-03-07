@@ -22,7 +22,10 @@
 
 .body {
   margin-top: $pt-grid-size;
-  overflow-y: scroll;
+  flex: 1 1 auto;
+  -webkit-flex: 1 1 auto;
+  overflow-y: auto;
+  height: 95vh;
 }
 
 .add-button {
