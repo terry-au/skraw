@@ -40,7 +40,7 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
                     <SearchBar className={styles["search-field"]} placeholder="Search for a snippet..."/>
                     <Button className={styles["add-button"]} minimal={true} icon="insert"/>
                 </div>
-                <div>
+                <div className={styles["item-container"]}>
                     <div className={styles["body"]}>
                         {this.snippetElements(this.state.searchTerm)}
                     </div>
