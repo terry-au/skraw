@@ -1,17 +1,14 @@
-import {
-  createStore,
-  applyMiddleware,
-} from 'redux';
+import {applyMiddleware, createStore,} from 'redux';
 
-import { createLogger } from 'redux-logger';
+import {createLogger} from 'redux-logger';
 import skraw from './reducers/skraw';
 // import { skraw } from './reducers/skraw';
 
 const loggerMiddleware = createLogger(); // initialize logger
 
 function createStoreWithMiddleware() {
-  const fun = applyMiddleware(loggerMiddleware)(createStore);
-  return fun(skraw, {});
+    const fun = applyMiddleware(loggerMiddleware)(createStore);
+    return fun(skraw, {});
 }
 
 createStoreWithMiddleware();
@@ -24,7 +21,7 @@ createStoreWithMiddleware();
 
 // const configureStore = (initialState: any) => {
 //   const unsubscribe = store.subscribe(() => console.log(store.getState()))
-  
+
 //   unsubscribe();
 // }
 
