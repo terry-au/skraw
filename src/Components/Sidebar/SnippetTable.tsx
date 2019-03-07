@@ -33,23 +33,6 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
         };
     }
 
-<<<<<<< HEAD
-  public render() {
-    return (
-      <div className={styles["table"]}>
-        <div id={"header"} className={styles["header"]}>
-          <SearchBar className={styles["search-field"]} placeholder="Search for a snippet..." />
-          <Button className={styles["add-button"]} minimal={true} icon="insert" />
-        </div>
-        <div>
-          <div className={styles["body"]}>
-            {this.snippetElements(this.state.searchTerm)}
-          </div>
-        </div>
-      </div>
-    );
-  }
-=======
     public render() {
         return (
             <div className={styles["table"]}>
@@ -65,7 +48,6 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
             </div>
         );
     }
->>>>>>> 77d21c1b3c2e06c811ff1af545b6f1ea171527eb
 
     private snippetElements = (filter: string): JSX.Element[] => {
         const snippets: JSX.Element[] = [];
@@ -88,7 +70,6 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
         });
         return snippets;
     };
-
 
     private handleTableResize = (entries: IResizeEntry[]) => {
         const resizeEntry: IResizeEntry = entries[entries.length - 1];
