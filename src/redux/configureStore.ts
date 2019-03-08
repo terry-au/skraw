@@ -15,14 +15,14 @@ createStoreWithMiddleware();
 
 // const reducer = combineReducers({
 //   skraw
-// });
+// })
 
 // const store = createStoreWithMiddleware(skraw, {});
 
 // const configureStore = (initialState: any) => {
 //   const unsubscribe = store.subscribe(() => console.log(store.getState()))
 
-//   unsubscribe();
+//   unsubscribe()
 // }
 
 export default createStoreWithMiddleware;
