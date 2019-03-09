@@ -1,15 +1,15 @@
-import {combineReducers} from "redux";
+import { combineReducers } from "redux";
 
 export const SELECT_SNIPPET = "SELECT_SNIPPET";
 
 const initialState = {
-    snippet: null
+    snippet: null,
 };
 
 export function selectSnippet(snippet: any) {
     return {
-        "type": SELECT_SNIPPET,
-        snippet
+        snippet,
+        type: SELECT_SNIPPET,
     };
 }
 
@@ -18,8 +18,8 @@ function reducer(state = initialState, action: any) {
         case SELECT_SNIPPET: {
             return {
                 ...state,
-                ...{}
-            }
+                ...{},
+            };
         }
         default:
             return state;

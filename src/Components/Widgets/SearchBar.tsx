@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {Button, InputGroup} from "@blueprintjs/core";
+import { Button, InputGroup } from "@blueprintjs/core";
+import React, { Component } from "react";
 
 interface ISearchBarProps {
     onSearchTermChange?: any;
@@ -17,9 +17,8 @@ export default class SearchBar extends Component<ISearchBarProps, ISearchBarStat
     constructor(props: Readonly<ISearchBarProps>) {
         super(props);
 
-
         this.state = {
-            searchTerm: ""
+            searchTerm: "",
         };
     }
 
@@ -31,38 +30,41 @@ export default class SearchBar extends Component<ISearchBarProps, ISearchBarStat
                 value={this.state.searchTerm}
                 onChange={this.onSearchTermChange}
                 placeholder={this.props.placeholder}
-                rightElement={
-                    (this.state.searchTerm
-                            ?
-                            <Button
-                                minimal={true}
-                                icon="cross"
-                                onClick={this.clearSearchTerm}
-                            />
-                            :
-                            undefined
-                    )
-                }
+                rightElement={this.getClearButton()}
             />
         );
     }
 
+    private getClearButton = (): JSX.Element | undefined => {
+        if (this.state.searchTerm) {
+            return (
+                <Button
+                    minimal={true}
+                    icon="cross"
+                    onClick={this.clearSearchTerm}
+                />
+            );
+        } else {
+            return undefined;
+        }
+    }
+
     private onSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const searchTerm: string = e.target.value;
-        this.setState({searchTerm});
+        this.setState({ searchTerm });
 
         this._setSearchTerm(searchTerm);
-    };
+    }
 
     private clearSearchTerm = () => {
         this.setState(
             {
-                searchTerm: ""
-            }
+                searchTerm: "",
+            },
         );
 
         this._setSearchTerm("");
-    };
+    }
 
     private _setSearchTerm(searchTerm: string) {
         if (this.props.onSearchTermChange) {

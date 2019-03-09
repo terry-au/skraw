@@ -1,35 +1,35 @@
 @import "~@blueprintjs/core/lib/scss/variables";
 
 .table {
-  background-color: darken($pt-dark-app-background-color, 3);
-  float: left;
-  width: 20%;
-  bottom: 0;
+    background-color: darken($pt-dark-app-background-color, 3);
+    float: left;
+    width: 20%;
+    bottom: 0;
 }
 
 .header {
-  display: flex;
-  flex-direction: row;
-  padding: $pt-grid-size;
-  height: 50px;
+    display: flex;
+    flex-direction: row;
+    padding: $pt-grid-size;
+    height: 50px;
 }
 
 .search-field {
-  display: inline-block;
-  margin: 0;
-  flex: 1 1;
-  margin-right: $pt-grid-size;
+    display: inline-block;
+    margin: 0;
+    flex: 1 1;
+    margin-right: $pt-grid-size;
 }
 
-.snippet-list{
-  flex: 1 1 auto;
-  -webkit-flex: 1 1 auto;
-  overflow-y: auto;
-  height: calc(100vh - 50px);
-  padding: $pt-grid-size;
+.snippet-list {
+    flex: 1 1 auto;
+    -webkit-flex: 1 1 auto;
+    overflow-y: auto;
+    height: calc(100vh - 50px);
+    padding: $pt-grid-size;
 }
 
 .add-button {
-  float: right;
-  margin: 0;
+    float: right;
+    margin: 0;
 }

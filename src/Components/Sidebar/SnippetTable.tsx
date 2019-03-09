@@ -1,10 +1,10 @@
-import React, {Component} from "react";
-import {ISnippet} from "../../Models/ISnippet";
-import SnippetCell from './SnippetCell';
+import React, { Component } from "react";
+import { ISnippet } from "../../Models/ISnippet";
+import SnippetCell from "./SnippetCell";
 
-import styles from "./SnippetTable.module.scss";
+import { Button, IResizeEntry } from "@blueprintjs/core";
 import SearchBar from "../Widgets/SearchBar";
-import {Button, IResizeEntry} from '@blueprintjs/core';
+import styles from "./SnippetTable.module.scss";
 
 interface ISnippetTableProps {
     className?: string;
@@ -26,19 +26,19 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
         super(props);
 
         this.state = {
+            height: 0,
             searchTerm: "",
             selectedSnippet: props.selectedSnippet,
             width: 0,
-            height: 0
         };
     }
 
     public render() {
         return (
-            <div className={styles["table"]}>
-                <div className={styles["header"]}>
-                    <SearchBar className={styles["search-field"]} placeholder="Search for a snippet..."/>
-                    <Button className={styles["add-button"]} minimal={true} icon="insert"/>
+            <div className={styles.table}>
+                <div className={styles.header}>
+                    <SearchBar className={styles["search-field"]} placeholder="Search for a snippet..." />
+                    <Button className={styles["add-button"]} minimal={true} icon="insert" />
                 </div>
                 <div className={styles["snippet-list"]}>
                     {this.snippetElements(this.state.searchTerm)}
@@ -49,17 +49,15 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
 
     private snippetElements = (filter: string): JSX.Element[] => {
         const snippets: JSX.Element[] = [];
-        this.props.snippets.forEach(snippet => {
+        this.props.snippets.forEach((snippet) => {
             let isSelected = false;
             if (this.state.selectedSnippet) {
-                isSelected = (this.state.selectedSnippet as ISnippet).uuid == snippet.uuid;
+                isSelected = (this.state.selectedSnippet as ISnippet).uuid === snippet.uuid;
             }
 
             const cell = (
                 <SnippetCell
-                    onCellSelected={() => {
-                        this.onCellSelected(snippet);
-                    }}
+                    onCellSelected={this.onCellSelected(snippet)}
                     selected={isSelected}
                     snippet={snippet}
                 />
@@ -67,7 +65,7 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
             snippets.push(cell);
         });
         return snippets;
-    };
+    }
 
     private handleTableResize = (entries: IResizeEntry[]) => {
         const resizeEntry: IResizeEntry = entries[entries.length - 1];
@@ -75,13 +73,15 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
             height: resizeEntry.contentRect.height,
             width: resizeEntry.contentRect.width,
         });
-    };
+    }
 
     private onCellSelected = (snippet: ISnippet) => {
-        this.setState({selectedSnippet: snippet});
+        return () => {
+            this.setState({ selectedSnippet: snippet });
 
-        if (this.props.onSelectSnippet) {
-            this.props.onSelectSnippet(snippet);
-        }
+            if (this.props.onSelectSnippet) {
+                this.props.onSelectSnippet(snippet);
+            }
+        };
     }
 }

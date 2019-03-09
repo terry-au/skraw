@@ -1,17 +1,12 @@
-import React, {Component} from 'react';
-import SnippetTable from './Components/Sidebar/SnippetTable';
-import {ISnippet} from './Models/ISnippet';
-import Editor from './Components/Editor/Editor';
-import {IResizeEntry, ResizeSensor} from '@blueprintjs/core';
+import { IResizeEntry, ResizeSensor } from "@blueprintjs/core";
+import React, { Component } from "react";
+import Editor from "./Components/Editor/Editor";
+import SnippetTable from "./Components/Sidebar/SnippetTable";
+import { ISnippet } from "./Models/ISnippet";
 
+import classNames from "classnames";
 import styles from "./App.module.scss";
-import classNames from 'classnames';
-import DummyData from './DummyData';
-
-
-interface IAppProps {
-
-}
+import DummyData from "./DummyData";
 
 interface IAppState {
     height: number;
@@ -19,20 +14,20 @@ interface IAppState {
     selectedSnippet?: ISnippet | null;
 }
 
-class App extends Component<IAppProps, IAppState> {
+class App extends Component<{}, IAppState> {
 
     private rootContainerRef: React.RefObject<HTMLDivElement>;
 
     private snippets: ISnippet[];
 
-    constructor(props: IAppProps) {
+    constructor(props: {}) {
         super(props);
 
         this.rootContainerRef = React.createRef();
         this.state = {
             height: 0,
+            selectedSnippet: null,
             width: 0,
-            selectedSnippet: null
         };
 
 
@@ -46,7 +41,7 @@ class App extends Component<IAppProps, IAppState> {
     }
 
     public componentDidMount() {
-        this.setState({height: 100});
+        this.setState({ height: 100 });
     }
 
     public render() {
@@ -58,7 +53,7 @@ class App extends Component<IAppProps, IAppState> {
                     ref={this.rootContainerRef}
                 >
                     <SnippetTable
-                        className={styles["sidebar"]}
+                        className={styles.sidebar}
                         onSelectSnippet={this.onSelectSnippet}
                         selectedSnippet={this.state.selectedSnippet}
                         snippets={this.snippets}
@@ -78,12 +73,12 @@ class App extends Component<IAppProps, IAppState> {
             height: resizeEntry.contentRect.height,
             width: resizeEntry.contentRect.width,
         });
-    };
+    }
 
     private onSelectSnippet = (snippet: ISnippet) => {
         this.setState({
-            selectedSnippet: snippet
-        })
+            selectedSnippet: snippet,
+        });
     }
 }
 
