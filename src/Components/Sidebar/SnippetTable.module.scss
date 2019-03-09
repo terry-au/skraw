@@ -1,7 +1,6 @@
 @import "~@blueprintjs/core/lib/scss/variables";
 
 .table {
-  padding: $pt-grid-size;
   background-color: darken($pt-dark-app-background-color, 3);
   float: left;
   width: 20%;
@@ -11,6 +10,8 @@
 .header {
   display: flex;
   flex-direction: row;
+  padding: $pt-grid-size;
+  height: 50px;
 }
 
 .search-field {
@@ -20,9 +21,12 @@
   margin-right: $pt-grid-size;
 }
 
-.body {
-  margin-top: $pt-grid-size;
-  overflow-y: scroll;
+.snippet-list{
+  flex: 1 1 auto;
+  -webkit-flex: 1 1 auto;
+  overflow-y: auto;
+  height: calc(100vh - 50px);
+  padding: $pt-grid-size;
 }
 
 .add-button {

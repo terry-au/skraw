@@ -40,10 +40,8 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
                     <SearchBar className={styles["search-field"]} placeholder="Search for a snippet..."/>
                     <Button className={styles["add-button"]} minimal={true} icon="insert"/>
                 </div>
-                <div>
-                    <div className={styles["body"]}>
-                        {this.snippetElements(this.state.searchTerm)}
-                    </div>
+                <div className={styles["snippet-list"]}>
+                    {this.snippetElements(this.state.searchTerm)}
                 </div>
             </div>
         );
@@ -70,7 +68,6 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
         });
         return snippets;
     };
-
 
     private handleTableResize = (entries: IResizeEntry[]) => {
         const resizeEntry: IResizeEntry = entries[entries.length - 1];
