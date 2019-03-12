@@ -6,12 +6,12 @@ import { selectSnippet } from "./actions";
 import styles from "./App.module.scss";
 import Editor from "./Components/Editor/Editor";
 import SnippetTable from "./Components/Sidebar/SnippetTable";
-import DummyData from "./DummyData";
 import { ISnippet } from "./Models/ISnippet";
 
 interface IAppProps {
     onSelectSnippet?: any;
     snippet?: ISnippet | null;
+    snippets?: ISnippet[] | null;
 }
 
 interface IAppState {
@@ -23,9 +23,7 @@ class App extends Component<IAppProps, IAppState> {
 
     private rootContainerRef: React.RefObject<HTMLDivElement>;
 
-    private snippets: ISnippet[];
-
-    constructor(props: {}) {
+    constructor(props: IAppProps) {
         super(props);
 
         this.rootContainerRef = React.createRef();
@@ -33,15 +31,6 @@ class App extends Component<IAppProps, IAppState> {
             height: 0,
             width: 0,
         };
-
-
-        this.snippets = [];
-
-        for (let index = 0; index < 20; index++) {
-            const rnd = Math.floor(Math.random() * 2);
-            const ob = rnd === 0 ? DummyData.js() : DummyData.cpp();
-            this.snippets.push(ob);
-        }
     }
 
     public componentDidMount() {
@@ -59,7 +48,7 @@ class App extends Component<IAppProps, IAppState> {
                         className={styles.sidebar}
                         onSelectSnippet={this.props.onSelectSnippet}
                         selectedSnippet={this.props.snippet}
-                        snippets={this.snippets}
+                        snippets={this.props.snippets!}
                     />
                     <Editor
                         height={this.state != null ? this.state.height : 100}
@@ -80,8 +69,10 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = (state: any) => {
+    const { snippet, snippets } = state;
     return {
-        snippet: state.snippet,
+        ...snippet,
+        ...snippets,
     };
 };
 

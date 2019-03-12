@@ -1,12 +1,25 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import { setSnippets } from "./actions";
 import App from "./App";
 import createStoreWithMiddleware from "./configureStore";
+import DummyData from "./DummyData";
 import "./index.scss";
 import * as serviceWorker from "./serviceWorker";
 
 const store = createStoreWithMiddleware();
+
+/* Mock store data. */
+{
+    const tempSnippets = [];
+    for (let index = 0; index < 20; index++) {
+        const rnd = Math.floor(Math.random() * 2);
+        const ob = rnd === 0 ? DummyData.js() : DummyData.cpp();
+        tempSnippets.push(ob);
+    }
+    store.dispatch(setSnippets(tempSnippets));
+}
 
 ReactDOM.render(
     <Provider store={store}>

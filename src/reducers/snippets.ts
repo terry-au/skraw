@@ -1,11 +1,16 @@
-import { SELECT_SNIPPET } from "../actions";
+import { SnippetOperations } from "../actions";
 
 const snippets = (state = {}, action: any) => {
     switch (action.type) {
-        case SELECT_SNIPPET:
+        case SnippetOperations.SELECT_SNIPPET:
             return {
                 ...state,
                 snippet: action.snippet,
+            };
+        case SnippetOperations.SET_SNIPPETS:
+            return {
+                ...state,
+                snippets: action.snippets,
             };
         default:
             return state;
