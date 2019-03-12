@@ -1,20 +1,25 @@
 import { IResizeEntry, ResizeSensor } from "@blueprintjs/core";
+import classNames from "classnames";
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { selectSnippet } from "./actions";
+import styles from "./App.module.scss";
 import Editor from "./Components/Editor/Editor";
 import SnippetTable from "./Components/Sidebar/SnippetTable";
+import DummyData from "./DummyData";
 import { ISnippet } from "./Models/ISnippet";
 
-import classNames from "classnames";
-import styles from "./App.module.scss";
-import DummyData from "./DummyData";
+interface IAppProps {
+    onSelectSnippet?: any;
+    snippet?: ISnippet | null;
+}
 
 interface IAppState {
     height: number;
     width: number;
-    selectedSnippet?: ISnippet | null;
 }
 
-class App extends Component<{}, IAppState> {
+class App extends Component<IAppProps, IAppState> {
 
     private rootContainerRef: React.RefObject<HTMLDivElement>;
 
@@ -26,7 +31,6 @@ class App extends Component<{}, IAppState> {
         this.rootContainerRef = React.createRef();
         this.state = {
             height: 0,
-            selectedSnippet: null,
             width: 0,
         };
 
@@ -45,7 +49,6 @@ class App extends Component<{}, IAppState> {
     }
 
     public render() {
-
         return (
             <ResizeSensor onResize={this.handleResize}>
                 <div
@@ -54,13 +57,13 @@ class App extends Component<{}, IAppState> {
                 >
                     <SnippetTable
                         className={styles.sidebar}
-                        onSelectSnippet={this.onSelectSnippet}
-                        selectedSnippet={this.state.selectedSnippet}
+                        onSelectSnippet={this.props.onSelectSnippet}
+                        selectedSnippet={this.props.snippet}
                         snippets={this.snippets}
                     />
                     <Editor
                         height={this.state != null ? this.state.height : 100}
-                        selectedSnippet={this.state.selectedSnippet}
+                        selectedSnippet={this.props.snippet}
                     />
                 </div>
             </ResizeSensor>
@@ -74,12 +77,20 @@ class App extends Component<{}, IAppState> {
             width: resizeEntry.contentRect.width,
         });
     }
-
-    private onSelectSnippet = (snippet: ISnippet) => {
-        this.setState({
-            selectedSnippet: snippet,
-        });
-    }
 }
 
-export default App;
+const mapStateToProps = (state: any) => {
+    return {
+        snippet: state.snippet,
+    };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        onSelectSnippet: (snippet: ISnippet) => {
+            dispatch(selectSnippet(snippet));
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
