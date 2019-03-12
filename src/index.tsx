@@ -1,15 +1,32 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { setSnippets } from "./actions";
 import App from "./App";
+import createStoreWithMiddleware from "./configureStore";
+import DummyData from "./DummyData";
 import "./index.scss";
-import createStoreWithMiddleware from "./redux/configureStore";
-import { selectSnippet } from "./redux/reducers/skraw";
 import * as serviceWorker from "./serviceWorker";
 
 const store = createStoreWithMiddleware();
-store.dispatch(selectSnippet("Learn about actions"));
 
-ReactDOM.render(<App />, document.getElementById("root"));
+/* Mock store data. */
+{
+    const tempSnippets = [];
+    for (let index = 0; index < 20; index++) {
+        const rnd = Math.floor(Math.random() * 2);
+        const ob = rnd === 0 ? DummyData.js() : DummyData.cpp();
+        tempSnippets.push(ob);
+    }
+    store.dispatch(setSnippets(tempSnippets));
+}
+
+ReactDOM.render(
+    <Provider store={store}>
+        <App />
+    </Provider>,
+    document.getElementById("root"),
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
