@@ -6,7 +6,7 @@ import { selectSnippet } from "./actions";
 import styles from "./App.module.scss";
 import Editor from "./components/Editor/Editor";
 import SnippetTable from "./components/Sidebar/SnippetTable";
-import { ISnippet } from "./Models/ISnippet";
+import { ISnippet } from "./models/ISnippet";
 
 interface IAppProps {
     onSelectSnippet?: any;
