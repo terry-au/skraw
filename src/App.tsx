@@ -4,8 +4,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { selectSnippet } from "./actions";
 import styles from "./App.module.scss";
-import Editor from "./Components/Editor/Editor";
-import SnippetTable from "./Components/Sidebar/SnippetTable";
+import Editor from "./components/Editor/Editor";
+import SnippetTable from "./components/Sidebar/SnippetTable";
 import { ISnippet } from "./Models/ISnippet";
 
 interface IAppProps {
