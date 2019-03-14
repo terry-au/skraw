@@ -4,6 +4,7 @@ import MonacoEditor from "react-monaco-editor";
 import { NonIdealState } from "@blueprintjs/core";
 import { ISnippet } from "../../models/ISnippet";
 import styles from "./Editor.module.css";
+import ResizableMonacoEditor from "./ResizableMonacoEditor";
 
 interface IEditorProps {
     height: number;
@@ -33,7 +34,7 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         let displayedElement;
         if (snippet) {
             displayedElement = (
-                <MonacoEditor
+                <ResizableMonacoEditor
                     width="100%"
                     height={this.props.height}
                     language={snippet.language}
