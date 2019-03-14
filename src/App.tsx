@@ -21,6 +21,11 @@ interface IAppState {
 
 class App extends Component<IAppProps, IAppState> {
 
+    public state: IAppState = {
+        height: 0,
+        width: 0,
+    };
+
     private rootContainerRef: React.RefObject<HTMLDivElement>;
 
     constructor(props: IAppProps) {
@@ -31,10 +36,6 @@ class App extends Component<IAppProps, IAppState> {
             height: 0,
             width: 0,
         };
-    }
-
-    public componentDidMount() {
-        this.setState({ height: 100 });
     }
 
     public render() {
