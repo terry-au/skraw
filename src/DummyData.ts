@@ -1,5 +1,5 @@
 import uuid from "uuid";
-import { ISnippet } from "./Models/ISnippet";
+import { ISnippet } from "./models/ISnippet";
 
 
 export default class DummyData {

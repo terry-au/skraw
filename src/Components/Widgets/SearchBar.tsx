@@ -2,7 +2,7 @@ import { Button, InputGroup } from "@blueprintjs/core";
 import React, { Component } from "react";
 
 interface ISearchBarProps {
-    onSearchTermChange?: any;
+    onSearchTermChange?: (term: string) => void;
     searchTerm?: string;
     className?: string;
     placeholder?: string;

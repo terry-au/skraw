@@ -11,6 +11,7 @@
                 120
             ]
         },
+        "jsx-wrap-multiline": true,
         "new-parens": true,
         "no-arg": true,
         "no-bitwise": true,

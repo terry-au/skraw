@@ -21,3 +21,15 @@
     border: 1px solid transparentize($color: ($dark-gray2), $amount: 0.3);
     border-color: $pt-icon-color-selected;
 }
+
+.search-result-match {
+    background-clip: padding-box;
+    background-color: rgb(243, 206, 109);
+    color: #000;
+    border: 1px solid darken(rgb(243, 206, 109), 15);
+    margin: -1px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
+}

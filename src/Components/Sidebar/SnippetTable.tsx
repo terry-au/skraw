@@ -1,9 +1,10 @@
-import React, { Component } from "react";
-import { ISnippet } from "../../Models/ISnippet";
-import SnippetCell from "./SnippetCell";
-
 import { Button, IResizeEntry } from "@blueprintjs/core";
+import _ from "lodash";
+import HashStatic from "object-hash";
+import React, { Component } from "react";
+import { ISnippet, querySnippets } from "../../models/ISnippet";
 import SearchBar from "../Widgets/SearchBar";
+import SnippetCell from "./SnippetCell";
 import styles from "./SnippetTable.module.scss";
 
 interface ISnippetTableProps {
@@ -37,26 +38,46 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
         return (
             <div className={styles.table}>
                 <div className={styles.header}>
-                    <SearchBar className={styles["search-field"]} placeholder="Search for a snippet..." />
+                    <SearchBar
+                        className={styles["search-field"]}
+                        onSearchTermChange={this.onSearchTermChange}
+                        placeholder="Search for a snippet..."
+                    />
                     <Button className={styles["add-button"]} minimal={true} icon="insert" />
                 </div>
                 <div className={styles["snippet-list"]}>
-                    {this.snippetElements(this.state.searchTerm)}
+                    {this.generateSnippetElements(this.state.searchTerm)}
                 </div>
             </div>
         );
     }
 
-    private snippetElements = (filter: string): JSX.Element[] => {
+    private onSearchTermChange = (searchTerm: string) => {
+        this.setState({ searchTerm });
+    }
+
+    private generateSnippetElements = (filter: string): JSX.Element[] => {
         const snippets: JSX.Element[] = [];
-        this.props.snippets.forEach((snippet) => {
+        const searchedSnippets = querySnippets(this.props.snippets, this.state.searchTerm);
+
+        searchedSnippets.forEach((snippetResult) => {
+            const highlightMetadata = _(snippetResult.matches).keyBy("key").value();
+
+            const snippet = snippetResult.item;
             let isSelected = false;
             if (this.state.selectedSnippet) {
-                isSelected = (this.state.selectedSnippet as ISnippet).uuid === snippet.uuid;
+                isSelected = this.state.selectedSnippet.uuid === snippet.uuid;
             }
 
+            /*
+            Hashing the search term and the UUID to ensure that renders are performed correctly
+            on cells with highlighted text.
+             */
+            const cellKey = HashStatic([this.state.searchTerm, snippet.uuid]);
             const cell = (
                 <SnippetCell
+                    highlightMetadata={highlightMetadata}
+                    key={cellKey}
                     onCellSelected={this.onCellSelected(snippet)}
                     selected={isSelected}
                     snippet={snippet}

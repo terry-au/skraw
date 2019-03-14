@@ -1,4 +1,4 @@
-import { ISnippet } from "../Models/ISnippet";
+import { ISnippet } from "../models/ISnippet";
 
 const SELECT_SNIPPET = "SELECT_SNIPPET";
 const SET_SNIPPETS = "SET_SNIPPETS";
