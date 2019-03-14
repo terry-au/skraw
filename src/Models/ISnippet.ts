@@ -21,7 +21,7 @@ export interface ISnippetQueryResult {
     matches: [ISnippetQueryResultMatch];
 }
 
-export const querySnippets = (snippets: ISnippet[], query: string): [ISnippetQueryResult] => {
+export const querySnippets = (snippets: ISnippet[], query: string): ISnippetQueryResult[] => {
     const options: Fuse.FuseOptions<any> = {
         distance: 100,
         includeMatches: true,
@@ -38,7 +38,11 @@ export const querySnippets = (snippets: ISnippet[], query: string): [ISnippetQue
         threshold: 0.8,
     };
     const fuse = new Fuse(snippets, options);
-    const results = fuse.search(query);
+    /*
+    Casting here because fuse.search() with includeMatches: true returns a datastructure different to
+    the inputted list.
+    */
+    const results = fuse.search(query) as unknown as ISnippetQueryResult[];
 
     return results;
 };
