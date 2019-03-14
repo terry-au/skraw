@@ -14,7 +14,7 @@ function createWindow() {
         height: 600,
         webPreferences: {
             nodeIntegration: false,
-            "unsafe-eval": false,
+            scrollBounce: true,
         },
         width: 960,
     });
