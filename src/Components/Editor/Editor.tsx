@@ -1,9 +1,7 @@
-import React, { Component } from "react";
-import MonacoEditor from "react-monaco-editor";
-
 import { NonIdealState } from "@blueprintjs/core";
+import React, { Component } from "react";
 import { ISnippet } from "../../models/ISnippet";
-import styles from "./Editor.module.css";
+import styles from "./Editor.module.scss";
 import ResizableMonacoEditor from "./ResizableMonacoEditor";
 
 interface IEditorProps {
