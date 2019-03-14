@@ -51,7 +51,7 @@ class App extends Component<IAppProps, IAppState> {
                         snippets={this.props.snippets!}
                     />
                     <Editor
-                        height={this.state != null ? this.state.height : 100}
+                        height={this.state.height}
                         selectedSnippet={this.props.snippet}
                     />
                 </div>
@@ -60,6 +60,8 @@ class App extends Component<IAppProps, IAppState> {
     }
 
     private handleResize = (entries: IResizeEntry[]) => {
+// tslint:disable-next-line: no-console
+        console.log(entries.map((e) => `${e.contentRect.width} x ${e.contentRect.height}`));
         const resizeEntry: IResizeEntry = entries[entries.length - 1];
         this.setState({
             height: resizeEntry.contentRect.height,

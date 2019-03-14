@@ -1,5 +1,6 @@
 {
     "name": "skraw",
+    "description": "A code snippet manager.",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
@@ -32,7 +33,14 @@
     "scripts": {
         "start": "rescripts start",
         "build": "rescripts build",
-        "test": "rescripts test"
+        "test": "rescripts test",
+        "electron-build": "rescripts build",
+        "electron-test": "rescripts test --env=jsdom",
+        "electron-start": "node src/electron-wait-react",
+        "electron": "electron .",
+        "pack": "build --dir",
+        "dist": "npm run build && build",
+        "postinstall": "install-app-deps"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -46,9 +54,22 @@
     "devDependencies": {
         "@rescripts/cli": "^0.0.10",
         "@rescripts/rescript-env": "^0.0.5",
+        "electron": "^4.1.0",
+        "electron-builder": "^20.39.0",
         "jshint": "^2.9.7",
         "monaco-editor-webpack-plugin": "^1.7.0",
         "tslint": "^5.13.1",
         "tslint-react": "^3.6.0"
+    },
+    "homepage": "./",
+    "main": "src/electron-starter.js",
+    "build": {
+        "appId": "com.electron.electron-with-create-react-app",
+        "win": {
+            "iconUrl": "https://cdn2.iconfinder.com/data/icons/designer-skills/128/react-256.png"
+        },
+        "directories": {
+            "buildResources": "public"
+        }
     }
 }
