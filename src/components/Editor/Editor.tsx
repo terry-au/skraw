@@ -5,6 +5,7 @@ import styles from "./Editor.module.scss";
 import ResizableMonacoEditor from "./ResizableMonacoEditor";
 
 interface IEditorProps {
+    darkTheme?: boolean;
     height: number;
     selectedSnippet?: ISnippet | null;
 }
@@ -36,7 +37,7 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
                     width="100%"
                     height={this.props.height}
                     language={snippet.language}
-                    theme="vs-dark"
+                    theme={this.getTheme()}
                     options={options}
                     value={snippet.body}
                 />
@@ -56,5 +57,9 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         }
 
         return displayedElement;
+    }
+
+    private getTheme = (): string => {
+        return this.props.darkTheme ? "vs-dark" : "vs";
     }
 }

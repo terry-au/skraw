@@ -1,6 +1,6 @@
 import { SnippetOperations } from "../actions";
 
-const snippets = (state = {}, action: any) => {
+export const snippets = (state = {}, action: any) => {
     switch (action.type) {
         case SnippetOperations.SELECT_SNIPPET:
             return {
@@ -16,5 +16,3 @@ const snippets = (state = {}, action: any) => {
             return state;
     }
 };
-
-export default snippets;

@@ -34,6 +34,7 @@
     "scripts": {
         "start": "rescripts start",
         "build": "rescripts build",
+        "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
         "test": "rescripts test --env=jsdom",
         "eject": "rescripts eject",
         "electron": "electron .",

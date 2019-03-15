@@ -4,7 +4,7 @@
 @import "~@blueprintjs/core/lib/scss/variables";
 
 body {
-    background-color: $pt-dark-app-background-color;
+    background-color: $pt-app-background-color;
     overflow: hidden;
     margin: 0;
     padding: 0;
@@ -13,6 +13,10 @@ body {
         sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+body .bp3-dark {
+    background-color: $pt-dark-app-background-color;
 }
 
 code {

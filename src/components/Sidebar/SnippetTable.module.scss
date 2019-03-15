@@ -3,27 +3,39 @@
 .table {
     display: flex;
     min-height: 100vh;
+    background-color: darken($pt-app-background-color, 3);
     flex-direction: column;
-    background-color: darken($pt-dark-app-background-color, 3);
     float: left;
     width: 20%;
     bottom: 0;
+}
+
+:global .bp3-dark :local .table {
+    background-color: darken($pt-dark-app-background-color, 3);
 }
 
 .header {
     display: flex;
     flex-direction: row;
     padding: $pt-grid-size;
-    background-color: darken($pt-dark-app-background-color, 2);
+    background-color: darken($pt-app-background-color, 2);
     box-shadow: 0 2px 2px -2px rgba(0, 0, 0, 0.5);
+}
+
+:global .bp3-dark :local .header {
+    background-color: darken($pt-dark-app-background-color, 2);
 }
 
 .footer {
     display: flex;
     flex-direction: row;
     padding: $pt-grid-size;
-    background-color: darken($pt-dark-app-background-color, 2);
+    background-color: darken($pt-app-background-color, 2);
     box-shadow: 0 -2px 2px -2px rgba(0, 0, 0, 0.5);
+}
+
+:global .bp3-dark :local .footer {
+    background-color: darken($pt-dark-app-background-color, 2);
 }
 
 .search-field {

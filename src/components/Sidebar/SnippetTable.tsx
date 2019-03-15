@@ -12,6 +12,8 @@ interface ISnippetTableProps {
     onSelectSnippet?: any;
     snippets: ISnippet[];
     selectedSnippet?: ISnippet | null;
+    onSetDarkTheme?: any;
+    darkTheme?: boolean;
 }
 
 interface ISnippetTableState {
@@ -49,10 +51,23 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
                     {this.generateSnippetElements(this.state.searchTerm)}
                 </div>
                 <div className={styles.footer}>
-                    <Button icon={"moon"} name="Toggle dark mode"/>
+                    <Button
+                        icon={this.getDarkModeIcon()}
+                        minimal={true}
+                        name="Toggle dark mode"
+                        onClick={this.toggleDarkTheme}
+                    />
                 </div>
             </div>
         );
+    }
+
+    private getDarkModeIcon = (): "flash" | "moon" => {
+        return this.props.darkTheme ? "flash" : "moon";
+    }
+
+    private toggleDarkTheme = () => {
+        this.props.onSetDarkTheme(!this.props.darkTheme);
     }
 
     private onSearchTermChange = (searchTerm: string) => {
