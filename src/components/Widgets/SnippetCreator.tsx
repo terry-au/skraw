@@ -3,6 +3,7 @@ import {
     Button,
     Classes,
     Dialog,
+    H5,
     InputGroup,
     Intent,
     Popover,
@@ -11,7 +12,6 @@ import {
 } from "@blueprintjs/core";
 import React, { Component } from "react";
 import styles from "./SnippetCreator.module.scss";
-import {H5} from "@blueprintjs/core/lib/cjs";
 
 interface ISnippetCreatorProps {
     className?: string;
