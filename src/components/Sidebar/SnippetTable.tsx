@@ -4,6 +4,7 @@ import HashStatic from "object-hash";
 import React, { Component } from "react";
 import { ISnippet, querySnippets } from "../../models/ISnippet";
 import SearchBar from "../Widgets/SearchBar";
+import SnippetCreator from "../Widgets/SnippetCreator";
 import SnippetCell from "./SnippetCell";
 import styles from "./SnippetTable.module.scss";
 
@@ -43,7 +44,7 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
                         onSearchTermChange={this.onSearchTermChange}
                         placeholder="Search for a snippet..."
                     />
-                    <Button className={styles["add-button"]} minimal={true} icon="insert" />
+                    <SnippetCreator/>
                 </div>
                 <div className={styles["snippet-list"]}>
                     {this.generateSnippetElements(this.state.searchTerm)}
