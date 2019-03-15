@@ -48,6 +48,9 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
                 <div className={styles["snippet-list"]}>
                     {this.generateSnippetElements(this.state.searchTerm)}
                 </div>
+                <div className={styles.footer}>
+                    <Button icon={"moon"} name="Toggle dark mode"/>
+                </div>
             </div>
         );
     }
