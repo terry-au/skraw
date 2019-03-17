@@ -39,7 +39,7 @@ class App extends React.Component<IAppProps, IAppState> {
     public render() {
         return (
             <div
-                className={classNames(this.getTheme(), styles["root-container"], styles.notransition)}
+                className={classNames(this.getTheme(), styles["root-container"])}
                 ref={this.rootContainerRef}
             >
                 <SnippetTable
@@ -55,11 +55,9 @@ class App extends React.Component<IAppProps, IAppState> {
                         className={styles.editor}
                         darkTheme={this.props.darkTheme}
                         height={this.state.editorHeight}
-                        width={this.state.editorWidth}
                         selectedSnippet={this.props.snippet}
                     />
                 </ResizeSensor>
-                <div className={styles.divider}/>
             </div>
         );
     }
@@ -70,10 +68,6 @@ class App extends React.Component<IAppProps, IAppState> {
 
     private handleEditorResize = (entries: IResizeEntry[]) => {
         const resizeEntry: IResizeEntry = entries[0];
-        entries.forEach((element) => {
-            // tslint:disable-next-line:no-console
-            console.log(`${element.contentRect.width} x ${element.contentRect.height}`);
-        });
 
         this.setState({
             editorHeight: resizeEntry.contentRect.height,

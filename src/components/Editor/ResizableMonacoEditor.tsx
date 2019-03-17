@@ -38,7 +38,5 @@ export default class ResizableMonacoEditor extends React.Component<MonacoEditorP
 
     private handleResize = () => {
         this.editor.layout();
-        // tslint:disable-next-line:no-console
-        console.log("resize!");
     }
 }

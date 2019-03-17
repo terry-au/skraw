@@ -20,14 +20,8 @@ interface IEditorState {
 
 export default class Editor extends Component<IEditorProps, IEditorState> {
 
-    public static getDerivedStateFromProps(props: IEditorProps, currentState: IEditorState) {
-        // tslint:disable-next-line:no-console
-        console.log(props);
-    }
-
-
     public render() {
-        const classes = classNames(this.props.className, styles.editor, "DEMO");
+        const classes = classNames(this.props.className, styles.editor);
         return (
             <div className={classes}>
                 {this.getEditorElement()}
