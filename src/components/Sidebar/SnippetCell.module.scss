@@ -32,6 +32,7 @@
 }
 
 :global .bp3-dark :local .selected {
+    border-color: $pt-dark-icon-color-selected;
     background-color: darken($color: $dark-gray4, $amount: 4);
 }
 
