@@ -27,3 +27,30 @@ code {
 *:focus {
     outline: none;
 }
+
+* {
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #777;
+        border-radius: 2px;
+        &:hover {
+            background: #444;
+        }
+    }
+
+    .bp3-dark &::-webkit-scrollbar-thumb {
+        background: #DDD;
+        border-radius: 2px;
+        &:hover {
+            background: #BBB;
+        }
+    }
+
+    &::-webkit-scrollbar-track {
+        border-radius: 2px;
+        background-color: transparentize($color: #111, $amount: 0.9);
+    }
+}

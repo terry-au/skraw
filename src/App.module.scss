@@ -15,6 +15,7 @@ $editor-width: 100% - $sidebar-width;
     min-width: $min-sidebar-width;
     width: $sidebar-width;
     max-width: $max-sidebar-width;
+    border-right: 1px solid transparentize($color: #293742, $amount: 0.9);
 }
 
 .editor {
