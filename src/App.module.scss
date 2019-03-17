@@ -5,19 +5,22 @@
 }
 
 $min-sidebar-width: 15em;
+$max-sidebar-width: 30em;
 $sidebar-width: 20%;
-$editor-width: 80%;
+$editor-width: 100% - $sidebar-width;
 
 .sidebar {
     height: 100%;
+    float: left;
     min-width: $min-sidebar-width;
     width: $sidebar-width;
-    float: left;
+    max-width: $max-sidebar-width;
 }
 
 .editor {
-    float: right;
     height: 100%;
-    max-width: calc(100% - #{$min-sidebar-width});
+    float: right;
+    min-width: calc(100% - #{$max-sidebar-width});
     width: $editor-width;
+    max-width: calc(100% - #{$min-sidebar-width});
 }
