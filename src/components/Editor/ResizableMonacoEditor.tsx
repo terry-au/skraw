@@ -6,6 +6,17 @@ export default class ResizableMonacoEditor extends React.Component<MonacoEditorP
 
     public componentDidMount() {
         window.addEventListener("resize", this.handleResize);
+
+        // let lastScroll = 0;
+        // window.addEventListener("resize", () => {
+        //     const now = +new Date();
+        //     if (now - lastScroll > 1000) {
+        //         // this.handleResize();
+        //         lastScroll = now;
+        //         // tslint:disable-next-line:no-console
+        //         console.log(lastScroll);
+        //     }
+        // });
     }
 
     public componentWillUnmount() {
@@ -27,5 +38,7 @@ export default class ResizableMonacoEditor extends React.Component<MonacoEditorP
 
     private handleResize = () => {
         this.editor.layout();
+        // tslint:disable-next-line:no-console
+        console.log("resize!");
     }
 }

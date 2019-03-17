@@ -1,4 +1,5 @@
 import { Button, IResizeEntry } from "@blueprintjs/core";
+import classNames from "classnames";
 import _ from "lodash";
 import HashStatic from "object-hash";
 import React, { Component } from "react";
@@ -38,7 +39,7 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
 
     public render() {
         return (
-            <div className={styles.table}>
+            <div className={classNames(this.props.className, styles.table)}>
                 <div className={styles.header}>
                     <SearchBar
                         className={styles["search-field"]}

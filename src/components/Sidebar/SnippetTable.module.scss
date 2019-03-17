@@ -2,12 +2,8 @@
 
 .table {
     display: flex;
-    min-height: 100vh;
     background-color: darken($pt-app-background-color, 3);
     flex-direction: column;
-    float: left;
-    width: 20%;
-    bottom: 0;
 }
 
 :global .bp3-dark :local .table {

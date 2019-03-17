@@ -1,4 +1,4 @@
-import { IResizeEntry, ResizeSensor } from "@blueprintjs/core";
+import { Classes, IResizeEntry, ResizeSensor } from "@blueprintjs/core";
 import classNames from "classnames";
 import React from "react";
 import { connect } from "react-redux";
@@ -17,57 +17,67 @@ interface IAppProps {
 }
 
 interface IAppState {
-    height: number;
-    width: number;
+    editorHeight: number;
+    editorWidth: number;
+    lastSetEditorSize: number;
 }
 
 class App extends React.Component<IAppProps, IAppState> {
     public state: IAppState = {
-        height: 0,
-        width: 0,
+        editorHeight: 0,
+        editorWidth: 0,
+        lastSetEditorSize: 0,
     };
 
     private rootContainerRef: React.RefObject<HTMLDivElement>;
 
-    constructor(props: IAppProps = {darkTheme: true}) {
+    constructor(props: IAppProps = { darkTheme: true }) {
         super(props);
         this.rootContainerRef = React.createRef();
     }
 
     public render() {
         return (
-            <ResizeSensor onResize={this.handleResize}>
-                <div
-                    className={classNames(this.getTheme(), styles["root-container"])}
-                    ref={this.rootContainerRef}
-                >
-                    <SnippetTable
-                        className={styles.sidebar}
-                        darkTheme={this.props.darkTheme}
-                        onSelectSnippet={this.props.onSelectSnippet}
-                        onSetDarkTheme={this.props.onSetDarkTheme}
-                        selectedSnippet={this.props.snippet}
-                        snippets={this.props.snippets!}
-                    />
+            <div
+                className={classNames(this.getTheme(), styles["root-container"], styles.notransition)}
+                ref={this.rootContainerRef}
+            >
+                <SnippetTable
+                    className={styles.sidebar}
+                    darkTheme={this.props.darkTheme}
+                    onSelectSnippet={this.props.onSelectSnippet}
+                    onSetDarkTheme={this.props.onSetDarkTheme}
+                    selectedSnippet={this.props.snippet}
+                    snippets={this.props.snippets!}
+                />
+                <ResizeSensor onResize={this.handleEditorResize} observeParents={true}>
                     <Editor
+                        className={styles.editor}
                         darkTheme={this.props.darkTheme}
-                        height={this.state.height}
+                        height={this.state.editorHeight}
+                        width={this.state.editorWidth}
                         selectedSnippet={this.props.snippet}
                     />
-                </div>
-            </ResizeSensor>
+                </ResizeSensor>
+                <div className={styles.divider}/>
+            </div>
         );
     }
 
     private getTheme = (): string => {
-        return this.props.darkTheme ? "bp3-dark" : "";
+        return this.props.darkTheme ? Classes.DARK : "";
     }
 
-    private handleResize = (entries: IResizeEntry[]) => {
-        const resizeEntry: IResizeEntry = entries[entries.length - 1];
+    private handleEditorResize = (entries: IResizeEntry[]) => {
+        const resizeEntry: IResizeEntry = entries[0];
+        entries.forEach((element) => {
+            // tslint:disable-next-line:no-console
+            console.log(`${element.contentRect.width} x ${element.contentRect.height}`);
+        });
+
         this.setState({
-            height: resizeEntry.contentRect.height,
-            width: resizeEntry.contentRect.width,
+            editorHeight: resizeEntry.contentRect.height,
+            editorWidth: resizeEntry.contentRect.width,
         });
     }
 }
