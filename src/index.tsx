@@ -7,8 +7,11 @@ import createStoreWithMiddleware from "./configureStore";
 import DummyData from "./DummyData";
 import "./index.scss";
 import * as serviceWorker from "./serviceWorker";
+import MonacoThemes from "./utils/MonacoThemes";
 
 const store = createStoreWithMiddleware();
+
+MonacoThemes.registerThemes();
 
 /* Mock store data. */
 {
