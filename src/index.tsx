@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { setSnippets } from "./actions";
 import App from "./App";
+import { patchMonaco } from "./auxiliary/skrawLanguageTokenExtension";
 import createStoreWithMiddleware from "./configureStore";
 import DummyData from "./DummyData";
 import "./index.scss";
@@ -11,6 +12,7 @@ import MonacoThemes from "./utils/MonacoThemes";
 
 const store = createStoreWithMiddleware();
 
+patchMonaco();
 MonacoThemes.registerThemes();
 
 /* Mock store data. */
