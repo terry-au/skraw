@@ -4,7 +4,7 @@
 @import "~@blueprintjs/core/lib/scss/variables";
 
 body {
-    background-color: $pt-dark-app-background-color;
+    background-color: $pt-app-background-color;
     overflow: hidden;
     margin: 0;
     padding: 0;
@@ -15,6 +15,10 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+body .bp3-dark {
+    background-color: $pt-dark-app-background-color;
+}
+
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
         monospace;
@@ -22,4 +26,33 @@ code {
 
 *:focus {
     outline: none;
+}
+
+* {
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #777;
+        border-radius: 2px;
+        &:hover {
+            background: #444;
+        }
+    }
+
+    .bp3-dark &::-webkit-scrollbar-thumb {
+        background: #DDD;
+        border-radius: 2px;
+        &:hover {
+            background: #BBB;
+        }
+    }
+
+    &::-webkit-scrollbar-track {
+        border-radius: 2px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        background-color: transparentize($color: #111, $amount: 0.9);
+    }
 }

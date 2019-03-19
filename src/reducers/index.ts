@@ -1,6 +1,8 @@
 import { combineReducers } from "redux";
-import snippets from "./snippets";
+import { settings } from "./settings";
+import { snippets } from "./snippets";
 
 export default combineReducers({
+  settings,
   snippets,
 });

@@ -1,11 +1,15 @@
 import { NonIdealState } from "@blueprintjs/core";
+import classNames from "classnames";
 import React, { Component } from "react";
 import { ISnippet } from "../../models/ISnippet";
 import styles from "./Editor.module.scss";
 import ResizableMonacoEditor from "./ResizableMonacoEditor";
 
 interface IEditorProps {
-    height: number;
+    className?: string;
+    darkTheme?: boolean;
+    height?: number;
+    width?: number;
     selectedSnippet?: ISnippet | null;
 }
 
@@ -15,9 +19,11 @@ interface IEditorState {
 }
 
 export default class Editor extends Component<IEditorProps, IEditorState> {
+
     public render() {
+        const classes = classNames(this.props.className, styles.editor);
         return (
-            <div className={styles.editor}>
+            <div className={classes}>
                 {this.getEditorElement()}
             </div>
         );
@@ -33,10 +39,10 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         if (snippet) {
             displayedElement = (
                 <ResizableMonacoEditor
-                    width="100%"
+                    width={this.props.width}
                     height={this.props.height}
                     language={snippet.language}
-                    theme="vs-dark"
+                    theme={this.getTheme()}
                     options={options}
                     value={snippet.body}
                 />
@@ -56,5 +62,9 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         }
 
         return displayedElement;
+    }
+
+    private getTheme = (): string => {
+        return this.props.darkTheme ? "vs-dark" : "vs";
     }
 }
