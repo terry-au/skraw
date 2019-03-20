@@ -10,18 +10,21 @@ interface IEditorProps {
     className?: string;
     darkTheme?: boolean;
     height?: number;
-    onSelectedSnippetDidUpdate: (snippet: ISnippet) => void;
-    selectedSnippet: ISnippet | null;
+    onSnippetDidUpdate: (snippet: ISnippet) => void;
+    snippet: ISnippet | null;
     width?: number;
 }
 
-export default class EditorPanel extends Component<IEditorProps> {
+export default class EditorPanel extends Component<IEditorProps, {}> {
 
     constructor(props: IEditorProps) {
         super(props);
-        this.state = {
-            selectedSnippet: props.selectedSnippet,
-        };
+
+        const state: any = {};
+        if (props.snippet) {
+            state.snippet = props.snippet;
+        }
+        this.state = state;
     }
 
     public render() {
@@ -38,7 +41,7 @@ export default class EditorPanel extends Component<IEditorProps> {
             selectOnLineNumbers: true,
         };
 
-        const snippet = this.props.selectedSnippet;
+        const snippet = this.props.snippet;
         let displayedElement;
         if (snippet) {
             displayedElement = (
@@ -70,9 +73,9 @@ export default class EditorPanel extends Component<IEditorProps> {
     }
 
     private onEditorChange = (value: string, event: monaco.editor.IModelContentChangedEvent) => {
-        const snippet: ISnippet = {...this.props.selectedSnippet!};
+        const snippet: ISnippet = {...this.props.snippet!};
         snippet.body = value;
-        this.props.onSelectedSnippetDidUpdate(snippet);
+        this.props.onSnippetDidUpdate(snippet);
     }
 
     private getTheme = (): string => {

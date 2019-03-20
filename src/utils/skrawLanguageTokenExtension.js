@@ -22,7 +22,7 @@ const _extendLanguageTokens = (tokens) => {
 
     if (!("skraw" in tokens.tokenizer)) {
         tokens.tokenizer.skrawSnippet = [
-            [/\$\{[1-9][0-9]*:[^#:%*@\-!_}]+[^#:%*@\-!_}]*\}/, 'meta.skrawMarker'],
+            [/\$\{[1-9][0-9]*:[A-Za-z_]+\}/, 'meta.skrawMarker'],
         ];
         tokens.tokenizer.root.unshift({
             "include": "@skrawSnippet"
