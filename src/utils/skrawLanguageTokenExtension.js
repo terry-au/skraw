@@ -4,14 +4,11 @@ import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
  * Extends the provided language tokens to add support for Skraw's
  * template substitution expressions: '${1:substitution_name}'.
  *
- * This function must be injected into:
- * node_modules/monaco-editor/esm/vs/basic-languages/_.contribution.js
+ * Calls made to:
+ * monaco.languages.setMonarchTokensProvider(languageId, languageDef);
  *
- * Where the call:
- * _monaco.languages.setMonarchTokensProvider(languageId, mod.language);
- *
- * Is to be replaced with:
- * _monaco.languages.setMonarchTokensProvider(languageId, _extendLanguageTokens(mod.language));
+ * Should be replaced with:
+ * monaco.languages.setMonarchTokensProvider(languageId, _extendLanguageTokens(languageDef));
  * @param tokens The language tokens to be extended upon.
  */
 const _extendLanguageTokens = (tokens) => {
@@ -46,7 +43,7 @@ export const patchMonacoLanguageTokenProviderFunction = () => {
         console.error("Monaco has already been patched. Aborting.")
         return;
     }
-    
+
     monaco.languages.inner_setMonarchTokensProvider = monaco.languages.setMonarchTokensProvider;
     monaco.languages.setMonarchTokensProvider = (languageId, languageDef) => {
         monaco.languages.inner_setMonarchTokensProvider(languageId, _extendLanguageTokens(languageDef))
