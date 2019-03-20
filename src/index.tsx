@@ -3,16 +3,16 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { setSnippets } from "./actions";
 import App from "./App";
-import { patchMonaco } from "./auxiliary/skrawLanguageTokenExtension";
 import createStoreWithMiddleware from "./configureStore";
 import DummyData from "./DummyData";
 import "./index.scss";
 import * as serviceWorker from "./serviceWorker";
 import MonacoThemes from "./utils/MonacoThemes";
+import { patchMonacoLanguageTokenProviderFunction } from "./utils/skrawLanguageTokenExtension";
 
 const store = createStoreWithMiddleware();
 
-patchMonaco();
+patchMonacoLanguageTokenProviderFunction();
 MonacoThemes.registerThemes();
 
 /* Mock store data. */

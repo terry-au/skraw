@@ -14,7 +14,11 @@ import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
  * _monaco.languages.setMonarchTokensProvider(languageId, _extendLanguageTokens(mod.language));
  * @param tokens The language tokens to be extended upon.
  */
-export const _extendLanguageTokens = (tokens) => {
+const _extendLanguageTokens = (tokens) => {
+    if (!tokens) {
+        return tokens;
+    }
+
     if (!("tokenizer" in tokens)) {
         tokens.tokenizer = {};
     }
@@ -27,11 +31,22 @@ export const _extendLanguageTokens = (tokens) => {
             "include": "@skrawSnippet"
         });
     }
+
     return tokens;
 }
 
-
-export const patchMonaco = () => {
+/**
+ * 🦍
+ * This function patches Monaco so that calls to monaco.languages.setMonarchTokensProvider
+ * have the second variable wrapped with a call to _extendLanguageTokens, which adds support
+ * for Skraw's template expression syntax.
+ */
+export const patchMonacoLanguageTokenProviderFunction = () => {
+    if (monaco.languages.inner_setMonarchTokensProvider) {
+        console.error("Monaco has already been patched. Aborting.")
+        return;
+    }
+    
     monaco.languages.inner_setMonarchTokensProvider = monaco.languages.setMonarchTokensProvider;
     monaco.languages.setMonarchTokensProvider = (languageId, languageDef) => {
         monaco.languages.inner_setMonarchTokensProvider(languageId, _extendLanguageTokens(languageDef))
