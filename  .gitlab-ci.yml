@@ -1,14 +1,15 @@
 # Using the node alpine image to build the React app
-image: node:alpine
+image: node:latest
 
 # Announce the URL as per CRA docs
 # https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#advanced-configuration
 variables:
   PUBLIC_URL: /skraw
-# Cache node modules - speeds up future builds
+# Cache modules in between jobs
 cache:
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
-  - node_modules
+  - node_modules/
 
 # Name the stages involved in the pipeline
 stages:
@@ -27,5 +28,5 @@ pages:
   artifacts:
     paths:
     - public # The built files for Gitlab Pages to serve
-  except:
+  only:
     - master # Only run on master branch
