@@ -1,3 +1,11 @@
-.editor {
-    // float: right;
+/* Disable squiggly underlines. */
+:global {
+    .squiggly-hint,
+    .squiggly-info,
+    .squiggly-warning,
+    .squiggly-error,
+    .squiggly-unnecessary,
+    .squiggly-inline-unnecessary {
+        background: none !important;
+    }
 }

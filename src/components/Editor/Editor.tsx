@@ -65,6 +65,6 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
     }
 
     private getTheme = (): string => {
-        return this.props.darkTheme ? "vs-dark" : "vs";
+        return this.props.darkTheme ? "vs-dark-skraw" : "vs-skraw";
     }
 }
