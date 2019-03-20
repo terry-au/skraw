@@ -1,8 +1,27 @@
 .root-container {
     height: 100vh;
+    min-height: 100vh;
     width: 100vw;
 }
 
+$min-sidebar-width: 15em;
+$max-sidebar-width: 30em;
+$sidebar-width: 20%;
+$editor-width: 100% - $sidebar-width;
+
 .sidebar {
     height: 100%;
+    float: left;
+    min-width: $min-sidebar-width;
+    width: $sidebar-width;
+    max-width: $max-sidebar-width;
+    border-right: 1px solid transparentize($color: #293742, $amount: 0.9);
+}
+
+.editor {
+    height: 100%;
+    float: right;
+    min-width: calc(100% - #{$max-sidebar-width});
+    width: $editor-width;
+    max-width: calc(100% - #{$min-sidebar-width});
 }

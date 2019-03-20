@@ -1,8 +1,8 @@
-import { IResizeEntry, ResizeSensor } from "@blueprintjs/core";
+import { Classes, IResizeEntry, ResizeSensor } from "@blueprintjs/core";
 import classNames from "classnames";
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
-import { selectSnippet } from "./actions";
+import { selectSnippet, setDarkTheme } from "./actions";
 import styles from "./App.module.scss";
 import Editor from "./components/Editor/Editor";
 import SnippetTable from "./components/Sidebar/SnippetTable";
@@ -10,72 +10,77 @@ import { ISnippet } from "./models/ISnippet";
 
 interface IAppProps {
     onSelectSnippet?: any;
+    onSetDarkTheme?: any;
     snippet?: ISnippet | null;
     snippets?: ISnippet[] | null;
+    darkTheme?: boolean;
 }
 
 interface IAppState {
-    height: number;
-    width: number;
+    editorHeight: number;
+    editorWidth: number;
+    lastSetEditorSize: number;
 }
 
-class App extends Component<IAppProps, IAppState> {
-
+class App extends React.Component<IAppProps, IAppState> {
     public state: IAppState = {
-        height: 0,
-        width: 0,
+        editorHeight: 0,
+        editorWidth: 0,
+        lastSetEditorSize: 0,
     };
 
     private rootContainerRef: React.RefObject<HTMLDivElement>;
 
-    constructor(props: IAppProps) {
+    constructor(props: IAppProps = { darkTheme: true }) {
         super(props);
-
         this.rootContainerRef = React.createRef();
-        this.state = {
-            height: 0,
-            width: 0,
-        };
     }
 
     public render() {
         return (
-            <ResizeSensor onResize={this.handleResize}>
-                <div
-                    className={classNames("bp3-dark", styles["root-container"])}
-                    ref={this.rootContainerRef}
-                >
-                    <SnippetTable
-                        className={styles.sidebar}
-                        onSelectSnippet={this.props.onSelectSnippet}
-                        selectedSnippet={this.props.snippet}
-                        snippets={this.props.snippets!}
-                    />
+            <div
+                className={classNames(this.getTheme(), styles["root-container"])}
+                ref={this.rootContainerRef}
+            >
+                <SnippetTable
+                    className={styles.sidebar}
+                    darkTheme={this.props.darkTheme}
+                    onSelectSnippet={this.props.onSelectSnippet}
+                    onSetDarkTheme={this.props.onSetDarkTheme}
+                    selectedSnippet={this.props.snippet}
+                    snippets={this.props.snippets!}
+                />
+                <ResizeSensor onResize={this.handleEditorResize} observeParents={true}>
                     <Editor
-                        height={this.state.height}
+                        className={styles.editor}
+                        darkTheme={this.props.darkTheme}
+                        height={this.state.editorHeight}
                         selectedSnippet={this.props.snippet}
                     />
-                </div>
-            </ResizeSensor>
+                </ResizeSensor>
+            </div>
         );
     }
 
-    private handleResize = (entries: IResizeEntry[]) => {
-// tslint:disable-next-line: no-console
-        console.log(entries.map((e) => `${e.contentRect.width} x ${e.contentRect.height}`));
-        const resizeEntry: IResizeEntry = entries[entries.length - 1];
+    private getTheme = (): string => {
+        return this.props.darkTheme ? Classes.DARK : "";
+    }
+
+    private handleEditorResize = (entries: IResizeEntry[]) => {
+        const resizeEntry: IResizeEntry = entries[0];
+
         this.setState({
-            height: resizeEntry.contentRect.height,
-            width: resizeEntry.contentRect.width,
+            editorHeight: resizeEntry.contentRect.height,
+            editorWidth: resizeEntry.contentRect.width,
         });
     }
 }
 
 const mapStateToProps = (state: any) => {
-    const { snippet, snippets } = state;
     return {
-        ...snippet,
-        ...snippets,
+        darkTheme: state.settings.darkTheme,
+        snippet: state.snippets.snippet,
+        snippets: state.snippets.snippets,
     };
 };
 
@@ -83,6 +88,9 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         onSelectSnippet: (snippet: ISnippet) => {
             dispatch(selectSnippet(snippet));
+        },
+        onSetDarkTheme: (enabled: boolean) => {
+            dispatch(setDarkTheme(enabled));
         },
     };
 };

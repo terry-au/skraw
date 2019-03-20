@@ -1,8 +1,9 @@
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import React from "react";
 import MonacoEditor, { MonacoEditorProps } from "react-monaco-editor";
 
 export default class ResizableMonacoEditor extends React.Component<MonacoEditorProps> {
-    private editor: any = null;
+    private editor: monaco.editor.IStandaloneCodeEditor | null = null;
 
     public componentDidMount() {
         window.addEventListener("resize", this.handleResize);
@@ -26,6 +27,8 @@ export default class ResizableMonacoEditor extends React.Component<MonacoEditorP
     }
 
     private handleResize = () => {
-        this.editor.layout();
+        if (this.editor) {
+            this.editor.layout();
+        }
     }
 }

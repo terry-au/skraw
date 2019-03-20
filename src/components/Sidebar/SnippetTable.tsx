@@ -1,4 +1,5 @@
 import { Button, IResizeEntry } from "@blueprintjs/core";
+import classNames from "classnames";
 import _ from "lodash";
 import HashStatic from "object-hash";
 import React, { Component } from "react";
@@ -12,6 +13,8 @@ interface ISnippetTableProps {
     onSelectSnippet?: any;
     snippets: ISnippet[];
     selectedSnippet?: ISnippet | null;
+    onSetDarkTheme?: any;
+    darkTheme?: boolean;
 }
 
 interface ISnippetTableState {
@@ -36,7 +39,7 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
 
     public render() {
         return (
-            <div className={styles.table}>
+            <div className={classNames(this.props.className, styles.table)}>
                 <div className={styles.header}>
                     <SearchBar
                         className={styles["search-field"]}
@@ -48,8 +51,24 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
                 <div className={styles["snippet-list"]}>
                     {this.generateSnippetElements(this.state.searchTerm)}
                 </div>
+                <div className={styles.footer}>
+                    <Button
+                        icon={this.getDarkModeIcon()}
+                        minimal={true}
+                        name="Toggle dark mode"
+                        onClick={this.toggleDarkTheme}
+                    />
+                </div>
             </div>
         );
+    }
+
+    private getDarkModeIcon = (): "flash" | "moon" => {
+        return this.props.darkTheme ? "flash" : "moon";
+    }
+
+    private toggleDarkTheme = () => {
+        this.props.onSetDarkTheme(!this.props.darkTheme);
     }
 
     private onSearchTermChange = (searchTerm: string) => {
