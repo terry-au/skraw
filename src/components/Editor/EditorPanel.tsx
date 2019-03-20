@@ -1,5 +1,6 @@
 import { NonIdealState } from "@blueprintjs/core";
 import classNames from "classnames";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import React, { Component } from "react";
 import { ISnippet } from "../../models/ISnippet";
 import styles from "./Editor.module.scss";
@@ -9,16 +10,22 @@ interface IEditorProps {
     className?: string;
     darkTheme?: boolean;
     height?: number;
+    onSnippetDidUpdate: (snippet: ISnippet) => void;
+    snippet: ISnippet | null;
     width?: number;
-    selectedSnippet?: ISnippet | null;
 }
 
-// tslint:disable-next-line: no-empty-interface
-interface IEditorState {
+export default class EditorPanel extends Component<IEditorProps, {}> {
 
-}
+    constructor(props: IEditorProps) {
+        super(props);
 
-export default class Editor extends Component<IEditorProps, IEditorState> {
+        const state: any = {};
+        if (props.snippet) {
+            state.snippet = props.snippet;
+        }
+        this.state = state;
+    }
 
     public render() {
         const classes = classNames(this.props.className, styles.editor);
@@ -34,7 +41,7 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
             selectOnLineNumbers: true,
         };
 
-        const snippet = this.props.selectedSnippet;
+        const snippet = this.props.snippet;
         let displayedElement;
         if (snippet) {
             displayedElement = (
@@ -43,6 +50,7 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
                     height={this.props.height}
                     language={snippet.language}
                     theme={this.getTheme()}
+                    onChange={this.onEditorChange}
                     options={options}
                     value={snippet.body}
                 />
@@ -62,6 +70,12 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         }
 
         return displayedElement;
+    }
+
+    private onEditorChange = (value: string, event: monaco.editor.IModelContentChangedEvent) => {
+        const snippet: ISnippet = {...this.props.snippet!};
+        snippet.body = value;
+        this.props.onSnippetDidUpdate(snippet);
     }
 
     private getTheme = (): string => {

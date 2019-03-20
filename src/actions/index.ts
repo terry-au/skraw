@@ -3,6 +3,7 @@ import { ISnippet } from "../models/ISnippet";
 const SELECT_SNIPPET = "SELECT_SNIPPET";
 const SET_SNIPPETS = "SET_SNIPPETS";
 const SET_DARK_THEME = "SET_DARK_THEME";
+const UPDATE_SNIPPET = "UPDATE_SELECTED";
 
 export const selectSnippet = (snippet: ISnippet) => {
     return {
@@ -18,6 +19,13 @@ export const setSnippets = (snippets: ISnippet[]) => {
     };
 };
 
+export const updateSnippet = (snippet: ISnippet) => {
+    return {
+        snippet,
+        type: UPDATE_SNIPPET,
+    };
+};
+
 export const setDarkTheme = (darkTheme: boolean) => {
     return {
         darkTheme,
@@ -28,6 +36,7 @@ export const setDarkTheme = (darkTheme: boolean) => {
 export const SnippetOperations = {
     SELECT_SNIPPET,
     SET_SNIPPETS,
+    UPDATE_SNIPPET,
 };
 
 export const SettingsOperations = {

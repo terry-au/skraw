@@ -10,18 +10,18 @@ import styles from "./SnippetTable.module.scss";
 
 interface ISnippetTableProps {
     className?: string;
-    onSelectSnippet?: any;
-    snippets: ISnippet[];
-    selectedSnippet?: ISnippet | null;
-    onSetDarkTheme?: any;
     darkTheme?: boolean;
+    onSelectSnippet?: (snippet: ISnippet, callback: () => void) => void;
+    onSetDarkTheme?: (darkTheme: boolean) => void;
+    selectedSnippet?: ISnippet | null;
+    snippets: ISnippet[];
 }
 
 interface ISnippetTableState {
+    height: number;
     searchTerm: string;
     selectedSnippet?: ISnippet | null;
     width: number;
-    height: number;
 }
 
 export default class SnippetTable extends Component<ISnippetTableProps, ISnippetTableState> {
@@ -117,10 +117,10 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
 
     private onCellSelected = (snippet: ISnippet) => {
         return () => {
-            this.setState({ selectedSnippet: snippet });
-
             if (this.props.onSelectSnippet) {
-                this.props.onSelectSnippet(snippet);
+                this.props.onSelectSnippet(snippet, () => {
+                    this.setState({ selectedSnippet: snippet });
+                });
             }
         };
     }
