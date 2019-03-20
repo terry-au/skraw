@@ -2,16 +2,18 @@ import { Classes, IResizeEntry, ResizeSensor } from "@blueprintjs/core";
 import classNames from "classnames";
 import React from "react";
 import { connect } from "react-redux";
-import { selectSnippet, setDarkTheme } from "./actions";
+import { selectSnippet, setDarkTheme, updateSnippet } from "./actions";
 import styles from "./App.module.scss";
-import Editor from "./components/Editor/Editor";
+import EditorPanel from "./components/Editor/EditorPanel";
 import SnippetTable from "./components/Sidebar/SnippetTable";
 import { ISnippet } from "./models/ISnippet";
 
 interface IAppProps {
+    // Managed by Redux.
     onSelectSnippet?: any;
     onSetDarkTheme?: any;
-    snippet?: ISnippet | null;
+    onSelectedSnippetDidUpdateBody?: any;
+    snippet: ISnippet | null;
     snippets?: ISnippet[] | null;
     darkTheme?: boolean;
 }
@@ -31,7 +33,7 @@ class App extends React.Component<IAppProps, IAppState> {
 
     private rootContainerRef: React.RefObject<HTMLDivElement>;
 
-    constructor(props: IAppProps = { darkTheme: true }) {
+    constructor(props: IAppProps = { darkTheme: true, snippet: null }) {
         super(props);
         this.rootContainerRef = React.createRef();
     }
@@ -51,10 +53,11 @@ class App extends React.Component<IAppProps, IAppState> {
                     snippets={this.props.snippets!}
                 />
                 <ResizeSensor onResize={this.handleEditorResize} observeParents={true}>
-                    <Editor
+                    <EditorPanel
                         className={styles.editor}
                         darkTheme={this.props.darkTheme}
                         height={this.state.editorHeight}
+                        onSelectedSnippetDidUpdate={this.props.onSelectedSnippetDidUpdateBody}
                         selectedSnippet={this.props.snippet}
                     />
                 </ResizeSensor>
@@ -88,6 +91,9 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         onSelectSnippet: (snippet: ISnippet) => {
             dispatch(selectSnippet(snippet));
+        },
+        onSelectedSnippetDidUpdateBody: (snippet: ISnippet) => {
+            dispatch(updateSnippet(snippet));
         },
         onSetDarkTheme: (enabled: boolean) => {
             dispatch(setDarkTheme(enabled));

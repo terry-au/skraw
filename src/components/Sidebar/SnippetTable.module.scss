@@ -44,9 +44,13 @@
 .snippet-list {
     flex: 1;
     -webkit-flex: 1;
-    overflow-y: scroll;
+    overflow-y: hidden;
     padding: $pt-grid-size;
     height: 0px;
+}
+
+.snippet-list:hover {
+    overflow-y: overlay;
 }
 
 .add-button {
