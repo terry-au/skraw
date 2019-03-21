@@ -4,7 +4,7 @@ image: node:latest
 # Announce the URL as per CRA docs
 # https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#advanced-configuration
 variables:
-  PUBLIC_URL: /skraw
+  PUBLIC_URL: /
 # Cache modules in between jobs
 cache:
   key: ${CI_COMMIT_REF_SLUG}
