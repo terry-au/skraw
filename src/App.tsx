@@ -96,14 +96,15 @@ class App extends React.Component<IAppProps, IAppState> {
             const description = "Your changes will be lost if you don't save them.";
             const buttons: IDialogueButton[] = [
                 {
-                    intent: Intent.NONE,
-                    onClick: dismissDialogue,
-                    text: "Cancel",
-                },
-                {
+                    after: DialogueGenerator.flexibleSpace(),
                     intent: Intent.DANGER,
                     onClick: changeSnippet(false),
                     text: "Don't Save",
+                },
+                {
+                    intent: Intent.NONE,
+                    onClick: dismissDialogue,
+                    text: "Cancel",
                 },
                 {
                     intent: Intent.PRIMARY,

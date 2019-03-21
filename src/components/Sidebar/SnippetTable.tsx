@@ -68,7 +68,7 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
     }
 
     private toggleDarkTheme = () => {
-        this.props.onSetDarkTheme(!this.props.darkTheme);
+        this.props.onSetDarkTheme!(!this.props.darkTheme);
     }
 
     private onSearchTermChange = (searchTerm: string) => {
@@ -117,7 +117,8 @@ export default class SnippetTable extends Component<ISnippetTableProps, ISnippet
 
     private onCellSelected = (snippet: ISnippet) => {
         return () => {
-            if (this.props.onSelectSnippet) {
+            if (this.props.onSelectSnippet
+                && (!this.props.selectedSnippet || this.props.selectedSnippet.uuid !== snippet.uuid)) {
                 this.props.onSelectSnippet(snippet, () => {
                     this.setState({ selectedSnippet: snippet });
                 });
