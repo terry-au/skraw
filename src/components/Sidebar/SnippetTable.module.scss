@@ -4,6 +4,7 @@
     display: flex;
     background-color: darken($pt-app-background-color, 3);
     flex-direction: column;
+    user-select: none;
 }
 
 :global .bp3-dark :local .table {
