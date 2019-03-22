@@ -2,7 +2,7 @@ import { Classes, Intent, IResizeEntry, ResizeSensor } from "@blueprintjs/core";
 import classNames from "classnames";
 import React from "react";
 import { connect } from "react-redux";
-import { selectSnippet, setDarkTheme, updateSnippet } from "./actions";
+import { deleteSnippet, selectSnippet, setDarkTheme, updateSnippet } from "./actions";
 import styles from "./App.module.scss";
 import EditorPanel from "./components/Editor/EditorPanel";
 import SnippetTable from "./components/Sidebar/SnippetTable";
@@ -12,6 +12,7 @@ import DialogueGenerator, { IDialogueButton } from "./utils/DialogueGenerator";
 interface IAppProps {
     // Managed by Redux.
     darkTheme?: boolean;
+    onDeleteSnippet?: (snippet: ISnippet) => void;
     onSelectSnippet?: (snippet: ISnippet) => void;
     onSetDarkTheme?: (darkTheme: boolean) => void;
     saveSnippetToStore?: (snippet: ISnippet) => void;
@@ -64,6 +65,7 @@ class App extends React.Component<IAppProps, IAppState> {
                         darkTheme={this.props.darkTheme}
                         height={this.state.editorHeight}
                         onSnippetDidUpdate={this.onSnippetDidUpdate}
+                        onSnippetWasDeleted={this.onDeleteSnippet}
                         snippet={this.state.snippet}
                     />
                 </ResizeSensor>
@@ -119,6 +121,11 @@ class App extends React.Component<IAppProps, IAppState> {
         }
     }
 
+    private onDeleteSnippet = (snippet: ISnippet) => {
+        this.setState({snippet: null});
+        this.props.onDeleteSnippet!(snippet);
+    }
+
     private onSnippetDidUpdate = (snippet: ISnippet) => {
         this.setState({ snippet });
     }
@@ -147,6 +154,9 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
+        onDeleteSnippet: (snippet: ISnippet) => {
+            dispatch(deleteSnippet(snippet));
+        },
         onSelectSnippet: (snippet: ISnippet) => {
             dispatch(selectSnippet(snippet));
         },

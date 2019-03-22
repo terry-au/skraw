@@ -1,0 +1,9 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.navigation-bar {
+    background-color: darken($pt-app-background-color, 2) !important;
+}
+
+:global .bp3-dark :local .navigation-bar {
+    background-color: darken($pt-dark-app-background-color, 2) !important;
+}

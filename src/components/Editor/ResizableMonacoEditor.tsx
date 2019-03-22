@@ -2,7 +2,11 @@ import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import React from "react";
 import MonacoEditor, { MonacoEditorProps } from "react-monaco-editor";
 
-export default class ResizableMonacoEditor extends React.Component<MonacoEditorProps> {
+interface IResizableMonacoEditorProps extends MonacoEditorProps {
+    className?: string;
+}
+
+export default class ResizableMonacoEditor extends React.Component<IResizableMonacoEditorProps> {
     private editor: monaco.editor.IStandaloneCodeEditor | null = null;
 
     public componentDidMount() {
@@ -14,11 +18,14 @@ export default class ResizableMonacoEditor extends React.Component<MonacoEditorP
     }
 
     public render() {
+        const {className, ...monacoProps} = this.props;
         return (
-            <MonacoEditor
-                {...this.props}
-                editorDidMount={this.handleEditorDidMount}
-            />
+            <div className={className}>
+                <MonacoEditor
+                    {...monacoProps}
+                    editorDidMount={this.handleEditorDidMount}
+                />
+            </div>
         );
     }
 

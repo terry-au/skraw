@@ -4,6 +4,14 @@ const SELECT_SNIPPET = "SELECT_SNIPPET";
 const SET_SNIPPETS = "SET_SNIPPETS";
 const SET_DARK_THEME = "SET_DARK_THEME";
 const UPDATE_SNIPPET = "UPDATE_SELECTED";
+const DELETE_SNIPPET = "DELETE_SNIPPET";
+
+export const deleteSnippet = (snippet: ISnippet) => {
+    return {
+        snippet,
+        type: DELETE_SNIPPET,
+    };
+};
 
 export const selectSnippet = (snippet: ISnippet) => {
     return {
@@ -34,6 +42,7 @@ export const setDarkTheme = (darkTheme: boolean) => {
 };
 
 export const SnippetOperations = {
+    DELETE_SNIPPET,
     SELECT_SNIPPET,
     SET_SNIPPETS,
     UPDATE_SNIPPET,

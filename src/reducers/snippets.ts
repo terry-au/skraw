@@ -3,6 +3,20 @@ import { ISnippet } from "../models/ISnippet";
 
 export const snippets = (state: any = {}, action: any) => {
     switch (action.type) {
+        case SnippetOperations.DELETE_SNIPPET: {
+            const snippet: ISnippet = action.snippet;
+            const updatedSnippets = state.snippets.reduce((result: ISnippet[], mappedSnippet: ISnippet) => {
+                if (snippet.uuid !== mappedSnippet.uuid) {
+                    result.push(mappedSnippet);
+                }
+                return result;
+            }, []);
+            return {
+                ...state,
+                snippet: null,
+                snippets: updatedSnippets,
+            };
+        }
         case SnippetOperations.UPDATE_SNIPPET: {
             const snippet: ISnippet = action.snippet;
             const updatedSnippets = state.snippets.map((mappedSnippet: ISnippet) => {
