@@ -5,7 +5,7 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 const addMonacoSupport = (config) => {
     const features = ["!gotoError", "!hover"];
-    return appendWebpackPlugin(new MonacoWebpackPlugin({features}), config);
+    return appendWebpackPlugin(new MonacoWebpackPlugin(features), config);
 };
 
 module.exports = [

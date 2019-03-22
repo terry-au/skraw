@@ -1,5 +1,6 @@
-/* Disable squiggly underlines. */
 :global {
+
+    /* Disable squiggly underlines. */
     .squiggly-hint,
     .squiggly-info,
     .squiggly-warning,
@@ -7,5 +8,12 @@
     .squiggly-unnecessary,
     .squiggly-inline-unnecessary {
         background: none !important;
+    }
+
+    /* Disable decorations overview, this shows red lines on errors,
+    however, Skraw's template expressions are considered errors.
+     */
+    .decorationsOverviewRuler {
+        display: none !important;
     }
 }
