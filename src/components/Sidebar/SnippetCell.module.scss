@@ -11,7 +11,7 @@
 }
 
 :global .bp3-dark :local .snippet-cell {
-    border-color: transparentize($color: ($dark-gray2), $amount: 0.2);
+    border-color: transparentize($color: ($dark-gray1), $amount: 0.7);
 }
 
 .snippet-cell:nth-child(n+2) {
