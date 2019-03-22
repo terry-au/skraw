@@ -1,9 +1,8 @@
-import { Classes, Intent, IResizeEntry, NonIdealState, ResizeSensor } from "@blueprintjs/core";
+import { Alert, Classes, InputGroup, Intent, IResizeEntry, NonIdealState, ResizeSensor } from "@blueprintjs/core";
 import classNames from "classnames";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import React, { Component } from "react";
 import { ISnippet } from "../../models/ISnippet";
-import DialogueGenerator, { IDialogueButton } from "../../utils/DialogueGenerator";
 import ActionsPanel from "./ActionsPanel";
 import styles from "./Editor.module.scss";
 import ResizableMonacoEditor from "./ResizableMonacoEditor";
@@ -14,15 +13,18 @@ interface IEditorProps {
     height?: number;
     onSnippetDidUpdate: (snippet: ISnippet) => void;
     onSnippetWasDeleted: (snippet: ISnippet) => void;
+    onSnippetWasRenamed: (snippet: ISnippet, newName: string) => void;
     snippet: ISnippet | null;
     width?: number;
 }
 
 interface IEditorState {
+    displayDeleteAlert: boolean;
+    displayRenameAlert: boolean;
     editing: boolean;
     navBarHeight: number;
     navBarWidth: number;
-    dialogue?: JSX.Element;
+    newSnippetName: string;
 }
 
 export default class EditorPanel extends Component<IEditorProps, IEditorState> {
@@ -31,10 +33,14 @@ export default class EditorPanel extends Component<IEditorProps, IEditorState> {
         super(props);
 
         const state: any = {
+            alert: null,
+            displayAlert: false,
             editing: false,
             navBarHeight: 0,
             navBarWidth: 0,
+            newSnippetName: "",
         };
+
         if (props.snippet) {
             state.snippet = props.snippet;
         }
@@ -45,7 +51,6 @@ export default class EditorPanel extends Component<IEditorProps, IEditorState> {
         const classes = classNames(this.props.className, styles.editor);
         return (
             <div className={classes}>
-                {this.state.dialogue}
                 {this.getEditorElement()}
             </div>
         );
@@ -63,6 +68,8 @@ export default class EditorPanel extends Component<IEditorProps, IEditorState> {
         if (snippet) {
             displayedElement = (
                 <React.Fragment>
+                    {this.deletionPrompt()}
+                    {this.renamePrompt()}
                     <ResizeSensor onResize={this.onNavBarResize}>
                         <ActionsPanel
                             onDeleteClicked={this.onDeleteSnippetClicked}
@@ -114,41 +121,92 @@ export default class EditorPanel extends Component<IEditorProps, IEditorState> {
         this.props.onSnippetDidUpdate(snippet);
     }
 
-    private onDeleteSnippetClicked = () => {
-        const theme = this.props.darkTheme ? Classes.DARK : "";
-        const dismissDialogue = () => {
-            this.setState({ dialogue: undefined });
+    private deletionPrompt = () => {
+        const onCancel = () => {
+            this.setState({ displayDeleteAlert: false });
         };
 
         const deleteSnippet = () => {
             this.props.onSnippetWasDeleted(this.props.snippet!);
-            dismissDialogue();
+            onCancel();
         };
 
-        const buttons: IDialogueButton[] = [
-            {
-                intent: Intent.NONE,
-                onClick: dismissDialogue,
-                text: "Cancel",
-            },
-            {
-                intent: Intent.DANGER,
-                onClick: deleteSnippet,
-                text: "Delete",
-            },
-        ];
-        const title = `Are you sure you want to delete '${this.props.snippet!.title}'?`;
+        const snippetName = this.props.snippet!.title;
+        const title = `Are you sure you want to delete '${snippetName}'?`;
         const description = "This operation cannot be undone.";
-        const dialogue = DialogueGenerator.generateDialogue(title, description, buttons, theme);
-        this.setState({dialogue});
+        const theme = this.props.darkTheme ? Classes.DARK : "";
+
+        return (
+            <Alert
+                className={theme}
+                cancelButtonText="Cancel"
+                confirmButtonText="Delete"
+                icon="trash"
+                intent={Intent.DANGER}
+                isOpen={this.state.displayDeleteAlert}
+                onCancel={onCancel}
+                onConfirm={deleteSnippet}
+            >
+                <p>
+                    <strong>{title}</strong>
+                    {description}
+                </p>
+            </Alert>
+        );
+    }
+
+    private renamePrompt = () => {
+        const onCancel = () => {
+            this.setState({ displayRenameAlert: false });
+        };
+
+        const deleteSnippet = () => {
+            this.props.onSnippetWasRenamed(this.props.snippet!, this.state.newSnippetName);
+            onCancel();
+        };
+
+        const snippetName = this.props.snippet!.title;
+        const title = `Are you sure you want to rename '${snippetName}'?`;
+        const theme = this.props.darkTheme ? Classes.DARK : "";
+
+        return (
+            <Alert
+                className={theme}
+                cancelButtonText="Cancel"
+                confirmButtonText="Rename"
+                intent={Intent.PRIMARY}
+                isOpen={this.state.displayRenameAlert}
+                onCancel={onCancel}
+                onConfirm={deleteSnippet}
+            >
+                <div>
+                    <p>
+                        <strong>{title}</strong>
+                    </p>
+                    <InputGroup
+                        onChange={this.handleSnippetNameChange}
+                        placeholder={snippetName}
+                        value={this.state.newSnippetName}
+                    />
+                </div>
+            </Alert>
+        );
+    }
+
+    private handleSnippetNameChange = (event: React.SyntheticEvent<HTMLInputElement>) => {
+        this.setState({ newSnippetName: event.currentTarget.value });
+    }
+
+    private onDeleteSnippetClicked = () => {
+        this.setState({displayDeleteAlert: true});
     }
 
     private onEditSnippetClicked = () => {
-        this.setState({editing: !this.state.editing});
+        this.setState({ editing: !this.state.editing });
     }
 
     private onRenameSnippetClicked = () => {
-        //
+        this.setState({displayRenameAlert: true});
     }
 
     private getEditorTheme = (): string => {
