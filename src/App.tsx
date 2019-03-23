@@ -1,81 +1,146 @@
-import { IResizeEntry, ResizeSensor } from "@blueprintjs/core";
+import { Classes, Intent, IResizeEntry, ResizeSensor } from "@blueprintjs/core";
 import classNames from "classnames";
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
-import { selectSnippet } from "./actions";
+import { selectSnippet, setDarkTheme, updateSnippet } from "./actions";
 import styles from "./App.module.scss";
-import Editor from "./components/Editor/Editor";
+import EditorPanel from "./components/Editor/EditorPanel";
 import SnippetTable from "./components/Sidebar/SnippetTable";
 import { ISnippet } from "./models/ISnippet";
+import DialogueGenerator, { IDialogueButton } from "./utils/DialogueGenerator";
 
 interface IAppProps {
-    onSelectSnippet?: any;
-    snippet?: ISnippet | null;
+    // Managed by Redux.
+    darkTheme?: boolean;
+    onSelectSnippet?: (snippet: ISnippet) => void;
+    onSetDarkTheme?: (darkTheme: boolean) => void;
+    saveSnippetToStore?: (snippet: ISnippet) => void;
+    snippet: ISnippet | null;
     snippets?: ISnippet[] | null;
 }
 
 interface IAppState {
-    height: number;
-    width: number;
+    dialogue?: JSX.Element;
+    editorHeight: number;
+    editorWidth: number;
+    lastSetEditorSize: number;
+    snippet: ISnippet | null;
 }
 
-class App extends Component<IAppProps, IAppState> {
+class App extends React.Component<IAppProps, IAppState> {
 
     public state: IAppState = {
-        height: 0,
-        width: 0,
+        editorHeight: 0,
+        editorWidth: 0,
+        lastSetEditorSize: 0,
+        snippet: null,
     };
 
     private rootContainerRef: React.RefObject<HTMLDivElement>;
 
-    constructor(props: IAppProps) {
+    constructor(props: IAppProps = { darkTheme: true, snippet: null }) {
         super(props);
-
         this.rootContainerRef = React.createRef();
-        this.state = {
-            height: 0,
-            width: 0,
-        };
     }
 
     public render() {
         return (
-            <ResizeSensor onResize={this.handleResize}>
-                <div
-                    className={classNames("bp3-dark", styles["root-container"])}
-                    ref={this.rootContainerRef}
-                >
-                    <SnippetTable
-                        className={styles.sidebar}
-                        onSelectSnippet={this.props.onSelectSnippet}
-                        selectedSnippet={this.props.snippet}
-                        snippets={this.props.snippets!}
+            <div
+                className={classNames(this.getTheme(), styles["root-container"])}
+                ref={this.rootContainerRef}
+            >
+                {this.state.dialogue}
+                <SnippetTable
+                    className={styles.sidebar}
+                    darkTheme={this.props.darkTheme}
+                    onSelectSnippet={this.onSelectSnippet}
+                    onSetDarkTheme={this.props.onSetDarkTheme}
+                    selectedSnippet={this.props.snippet}
+                    snippets={this.props.snippets!}
+                />
+                <ResizeSensor onResize={this.handleEditorResize} observeParents={true}>
+                    <EditorPanel
+                        className={styles.editor}
+                        darkTheme={this.props.darkTheme}
+                        height={this.state.editorHeight}
+                        onSnippetDidUpdate={this.onSnippetDidUpdate}
+                        snippet={this.state.snippet}
                     />
-                    <Editor
-                        height={this.state.height}
-                        selectedSnippet={this.props.snippet}
-                    />
-                </div>
-            </ResizeSensor>
+                </ResizeSensor>
+            </div>
         );
     }
 
-    private handleResize = (entries: IResizeEntry[]) => {
-// tslint:disable-next-line: no-console
-        console.log(entries.map((e) => `${e.contentRect.width} x ${e.contentRect.height}`));
-        const resizeEntry: IResizeEntry = entries[entries.length - 1];
+    private onSelectSnippet = (snippet: ISnippet, callback: any) => {
+        const dismissDialogue = () => {
+            this.setState({ dialogue: undefined });
+        };
+
+        const changeSnippet = (save: boolean) => {
+            return () => {
+                if (save) {
+                    this.props.saveSnippetToStore!(this.state.snippet!);
+                }
+
+                this.setState({ snippet });
+                this.props.onSelectSnippet!(snippet);
+                callback();
+                dismissDialogue();
+            };
+        };
+
+        if (this.props.snippet && this.state.snippet
+            && this.props.snippet.body !== this.state.snippet.body) {
+
+            const title = `Do you want to save the changes you made to ${this.state.snippet.title}?`;
+            const description = "Your changes will be lost if you don't save them.";
+            const buttons: IDialogueButton[] = [
+                {
+                    intent: Intent.NONE,
+                    onClick: dismissDialogue,
+                    text: "Cancel",
+                },
+                {
+                    intent: Intent.DANGER,
+                    onClick: changeSnippet(false),
+                    text: "Don't Save",
+                },
+                {
+                    intent: Intent.PRIMARY,
+                    onClick: changeSnippet(true),
+                    text: "Save",
+                },
+            ];
+            const dialogue = DialogueGenerator.generateDialogue(title, description, buttons, this.getTheme());
+            this.setState({ dialogue });
+        } else {
+            changeSnippet(false)();
+        }
+    }
+
+    private onSnippetDidUpdate = (snippet: ISnippet) => {
+        this.setState({ snippet });
+    }
+
+    private getTheme = (): string => {
+        return this.props.darkTheme ? Classes.DARK : "";
+    }
+
+    private handleEditorResize = (entries: IResizeEntry[]) => {
+        const resizeEntry: IResizeEntry = entries[0];
+
         this.setState({
-            height: resizeEntry.contentRect.height,
-            width: resizeEntry.contentRect.width,
+            editorHeight: resizeEntry.contentRect.height,
+            editorWidth: resizeEntry.contentRect.width,
         });
     }
 }
 
 const mapStateToProps = (state: any) => {
-    const { snippet, snippets } = state;
     return {
-        ...snippet,
-        ...snippets,
+        darkTheme: state.settings.darkTheme,
+        snippet: state.snippets.snippet,
+        snippets: state.snippets.snippets,
     };
 };
 
@@ -83,6 +148,12 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         onSelectSnippet: (snippet: ISnippet) => {
             dispatch(selectSnippet(snippet));
+        },
+        onSetDarkTheme: (enabled: boolean) => {
+            dispatch(setDarkTheme(enabled));
+        },
+        saveSnippetToStore: (snippet: ISnippet) => {
+            dispatch(updateSnippet(snippet));
         },
     };
 };

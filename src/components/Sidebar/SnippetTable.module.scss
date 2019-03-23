@@ -1,17 +1,37 @@
 @import "~@blueprintjs/core/lib/scss/variables";
 
 .table {
+    display: flex;
+    background-color: darken($pt-app-background-color, 3);
+    flex-direction: column;
+}
+
+:global .bp3-dark :local .table {
     background-color: darken($pt-dark-app-background-color, 3);
-    float: left;
-    width: 20%;
-    bottom: 0;
 }
 
 .header {
     display: flex;
     flex-direction: row;
     padding: $pt-grid-size;
-    height: 50px;
+    background-color: darken($pt-app-background-color, 2);
+    box-shadow: 0 2px 2px -2px rgba(0, 0, 0, 0.5);
+}
+
+:global .bp3-dark :local .header {
+    background-color: darken($pt-dark-app-background-color, 2);
+}
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    padding: $pt-grid-size;
+    background-color: darken($pt-app-background-color, 2);
+    box-shadow: 0 -2px 2px -2px rgba(0, 0, 0, 0.5);
+}
+
+:global .bp3-dark :local .footer {
+    background-color: darken($pt-dark-app-background-color, 2);
 }
 
 .search-field {
@@ -22,9 +42,13 @@
 }
 
 .snippet-list {
-    flex: 1 1 auto;
-    -webkit-flex: 1 1 auto;
-    overflow-y: auto;
-    height: calc(100vh - 50px);
+    flex: 1;
+    -webkit-flex: 1;
+    overflow-y: hidden;
     padding: $pt-grid-size;
+    height: 0px;
+}
+
+.snippet-list:hover {
+    overflow-y: overlay;
 }

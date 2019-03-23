@@ -1,12 +1,17 @@
 @import "~@blueprintjs/core/lib/scss/variables";
 
 .snippet-cell {
-    // background-color: $dark-gray2;
-    // border-color: ;
-    border: 1px solid transparentize($color: ($dark-gray2), $amount: 0.3);
+    border-width: 1px;
+    border-style:  solid;
+    border-color: transparentize($color: ($gray2), $amount: 0.7);
     padding: $pt-grid-size;
     border-radius: $pt-grid-size / 2;
-    transition: background-color 100ms ease-in-out;
+    user-select: none;
+    cursor: default;
+}
+
+:global .bp3-dark :local .snippet-cell {
+    border-color: transparentize($color: ($dark-gray2), $amount: 0.2);
 }
 
 .snippet-cell:nth-child(n+2) {
@@ -14,12 +19,22 @@
 }
 
 .snippet-cell:hover {
+    background-color: transparentize($color: $gray4, $amount: 0.5);
+}
+
+:global .bp3-dark :local .snippet-cell:hover {
     background-color: $dark-gray4;
 }
 
 .selected {
     border: 1px solid transparentize($color: ($dark-gray2), $amount: 0.3);
     border-color: $pt-icon-color-selected;
+    background-color: $gray5;
+}
+
+:global .bp3-dark :local .selected {
+    border-color: $pt-dark-icon-color-selected;
+    background-color: darken($color: $dark-gray4, $amount: 4);
 }
 
 .search-result-match {
