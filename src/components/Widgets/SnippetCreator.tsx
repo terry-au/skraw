@@ -14,6 +14,7 @@ import {
   Tooltip,
 } from "@blueprintjs/core";
 import { Select } from "@blueprintjs/select";
+import * as _ from "lodash";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import React, { Component } from "react";
 import styles from "./SnippetCreator.module.scss";
@@ -39,8 +40,13 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
     public render() {
         const languages = monaco.languages.getLanguages();
 
+        // tslint:disable-next-line:no-console
+        console.log(languages);
+
         const languageList = (
           <Select
+            items={languages}
+            itemRenderer={this.renderLanguageItems}
             onItemSelect={this.selectLanguage}
           >
               <Button
@@ -50,7 +56,7 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
                   disabled={false}
               />
           </Select>
-        )
+        );
 
         const eq = (
           <Menu>
@@ -87,7 +93,7 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
                           disabled={false}
                           large={false}
                           placeholder="Snippet Name"
-                          rightElement={permissionsMenu}
+                          rightElement={languageList}
                           small={false}
                       />
 
@@ -106,7 +112,7 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
                   </div>,
               </Popover>
 
-
+              {/* alternative ui */}
               <Dialog
                   className={""}
                   icon="insert"
@@ -135,9 +141,26 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
         );
     }
 
+    private renderLanguageItems = (lang: any, { handleClick, modifiers, query }) => {
+        // if (!modifiers.matchesPredicate) {z
+        //     return null;
+        // }
+        const text = _.get(lang, "aliases.0", lang.id);
+        return (
+            <MenuItem
+                active={modifiers.active}
+                disabled={modifiers.disabled}
+                label={lang.id}
+                key={lang.id}
+                onClick={handleClick}
+                text={text}
+            />
+        );
+    }
+
     private handleAction = () => this.setState({isDisplayed: !this.state.isDisplayed});
 
-    private selectLanguage = () => {
+    private selectLanguage = (lang: any) => {
       alert("selected new language");
     }
 
