@@ -1,15 +1,20 @@
 import {
-    AnchorButton,
-    Button,
-    Classes,
-    Dialog,
-    H5,
-    InputGroup,
-    Intent,
-    Popover,
-    PopoverPosition,
-    Tooltip,
+  AnchorButton,
+  Button,
+  Classes,
+  Dialog,
+  H5,
+  InputGroup,
+  Intent,
+  Menu,
+  MenuItem,
+  Popover,
+  PopoverPosition,
+  Position,
+  Tooltip,
 } from "@blueprintjs/core";
+import { Select } from "@blueprintjs/select";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import React, { Component } from "react";
 import styles from "./SnippetCreator.module.scss";
 
@@ -32,6 +37,40 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
     }
 
     public render() {
+        const languages = monaco.languages.getLanguages();
+
+        const languageList = (
+          <Select
+            onItemSelect={this.selectLanguage}
+          >
+              <Button
+                  icon="film"
+                  rightIcon="caret-down"
+                  text={"aaaa"}
+                  disabled={false}
+              />
+          </Select>
+        )
+
+        const eq = (
+          <Menu>
+              {languages.map((lang, i) => <MenuItem text={lang.id} key={i} />)}
+          </Menu>
+        );
+
+        const permissionsMenu = (
+          <Popover
+              content={eq}
+              disabled={false}
+              position={Position.BOTTOM_RIGHT}
+          >
+              <Button disabled={false} minimal={true} rightIcon="caret-down">
+                  Language
+              </Button>
+          </Popover>
+      );
+
+
         return (
           <div>
               <Popover
@@ -43,14 +82,25 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
               >
                   <Button className={styles["add-button"]} minimal={true} icon="insert" onClick={this.handleAction}/>
                   <div key="text">
-                      <H5>Confirm deletion</H5>
-                      <p>Are you sure you want to delete these items? You won't be able to recover them.</p>
+                      <H5>New Snippet</H5>
+                      <InputGroup
+                          disabled={false}
+                          large={false}
+                          placeholder="Snippet Name"
+                          rightElement={permissionsMenu}
+                          small={false}
+                      />
+
                       <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 15 }}>
-                          <Button className={Classes.POPOVER_DISMISS} style={{ marginRight: 10 }}>
+                          <Button
+                            className={Classes.POPOVER_DISMISS}
+                            style={{ marginRight: 10 }}
+                            onClick={this.handleAction}
+                          >
                               Cancel
                           </Button>
                           <Button intent={Intent.DANGER} className={Classes.POPOVER_DISMISS}>
-                              Delete
+                              Add
                           </Button>
                       </div>
                   </div>,
@@ -87,6 +137,8 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
 
     private handleAction = () => this.setState({isDisplayed: !this.state.isDisplayed});
 
-
+    private selectLanguage = () => {
+      alert("selected new language");
+    }
 
 }
