@@ -40,14 +40,14 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
     public render() {
         const languages = monaco.languages.getLanguages();
 
-        // tslint:disable-next-line:no-console
-        console.log(languages);
-
         const languageList = (
           <Select
-            items={languages}
-            itemRenderer={this.renderLanguageItems}
-            onItemSelect={this.selectLanguage}
+              items={languages}
+              itemRenderer={this.renderLanguageItems}
+              itemPredicate={this.filterLanguage}
+              onItemSelect={this.selectLanguage}
+              noResults={<MenuItem disabled={true} text="No results." />}
+              popoverProps={{minimal: true}}
           >
               <Button
                   icon="film"
@@ -75,18 +75,44 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
               </Button>
           </Popover>
       );
-
-
         return (
           <div>
-              <Popover
+              {languageList}
+
+              <Button className={styles["add-button"]} minimal={true} icon="insert" onClick={this.handleAction}/>
+              <Dialog
+                  className={""}
+                  icon="insert"
+                  onClose={this.handleAction}
+                  title="New Snippet"
+                  isOpen={this.state.isDisplayed}
+              >
+                  <div className={Classes.DIALOG_BODY}>
+                      <p>
+                          Add snippet
+                      </p>
+                  </div>
+                  <div className={Classes.DIALOG_FOOTER}>
+                      <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+                          <Button
+                              intent={Intent.PRIMARY}
+                              onClick={this.handleAction}
+                          >
+                              Add
+                          </Button>
+                          <Button onClick={this.handleAction}>Cancel</Button>
+                      </div>
+                  </div>
+              </Dialog>
+
+              {// tslint:disable-next-line: jsx-no-multiline-js
+              /* <Popover
                   popoverClassName={Classes.POPOVER_CONTENT_SIZING}
                   portalClassName="foo"
                   enforceFocus={false}
                   position={PopoverPosition.RIGHT_TOP}
-                  isOpen={this.state.isDisplayed}
+                  isOpen={false} // this.state.isDisplayed
               >
-                  <Button className={styles["add-button"]} minimal={true} icon="insert" onClick={this.handleAction}/>
                   <div key="text">
                       <H5>New Snippet</H5>
                       <InputGroup
@@ -110,41 +136,36 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
                           </Button>
                       </div>
                   </div>,
-              </Popover>
-
-              {/* alternative ui */}
-              <Dialog
-                  className={""}
-                  icon="insert"
-                  onClose={undefined} // this.handleAction
-                  title="New Snippet"
-                  isOpen={undefined} // this.state.isDisplayed
-              >
-                  <div className={Classes.DIALOG_BODY}>
-                      <p>
-                          Add snippet
-                      </p>
-                  </div>
-                  <div className={Classes.DIALOG_FOOTER}>
-                      <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-                          <Button
-                              intent={Intent.PRIMARY}
-                              onClick={this.handleAction}
-                          >
-                              Add
-                          </Button>
-                          <Button onClick={this.handleAction}>Cancel</Button>
-                      </div>
-                  </div>
-              </Dialog>
+              </Popover> */}
           </div>
         );
     }
 
+    private printMsg(msg: any) {
+        // tslint:disable-next-line:no-console
+        console.info(msg);
+    }
+
+    private filterLanguage = (query, lang, index, exactMatch) => {
+        const target = _.uniq([lang.id, ...lang.aliases.map((l: string) => l.toLowerCase())]);
+        const normalizedTitle = _.get(lang, "aliases.0", lang.id).toLowerCase();
+        // this.printMsg(target);
+        this.printMsg(exactMatch);
+
+        const normalizedQuery = query.toLowerCase();
+        // ${normalizedTitle}
+
+        if (exactMatch) {
+            return normalizedTitle === normalizedQuery; // _.includes(target, normalizedQuery);
+        } else {
+            return `${normalizedTitle}`.indexOf(normalizedQuery) >= 0;
+        }
+    }
+
     private renderLanguageItems = (lang: any, { handleClick, modifiers, query }) => {
-        // if (!modifiers.matchesPredicate) {z
-        //     return null;
-        // }
+        if (!modifiers.matchesPredicate) {
+            return null;
+        }
         const text = _.get(lang, "aliases.0", lang.id);
         return (
             <MenuItem
@@ -155,6 +176,20 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
                 onClick={handleClick}
                 text={text}
             />
+        );
+    }
+
+
+    private renderMenu = ({items, itemsParentRef, query, renderItem}) => {
+        const renderedItems = items.map(renderItem).filter((item) => item != null);
+        return (
+            <Menu ulRef={itemsParentRef}>
+                <MenuItem
+                    disabled={true}
+                    text={`Found ${renderedItems.length} items matching "${query}"`}
+                />
+                {renderedItems}
+            </Menu>
         );
     }
 
