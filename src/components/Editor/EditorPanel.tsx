@@ -4,7 +4,7 @@ import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import React, { Component } from "react";
 import { ISnippet } from "../../models/ISnippet";
 import ActionsPanel from "./ActionsPanel";
-import styles from "./Editor.module.scss";
+import styles from "./EditorPanel.module.scss";
 import ResizableMonacoEditor from "./ResizableMonacoEditor";
 
 interface IEditorProps {
@@ -144,6 +144,8 @@ export default class EditorPanel extends Component<IEditorProps, IEditorState> {
                 icon="trash"
                 intent={Intent.DANGER}
                 isOpen={this.state.displayDeleteAlert}
+                canOutsideClickCancel={true}
+                canEscapeKeyCancel={true}
                 onCancel={onCancel}
                 onConfirm={deleteSnippet}
             >
@@ -160,30 +162,34 @@ export default class EditorPanel extends Component<IEditorProps, IEditorState> {
             this.setState({ displayRenameAlert: false });
         };
 
-        const deleteSnippet = () => {
+        const renameSnippet = () => {
             this.props.onSnippetWasRenamed(this.props.snippet!, this.state.newSnippetName);
             onCancel();
+            this.setState({newSnippetName: ""});
         };
 
         const snippetName = this.props.snippet!.title;
-        const title = `Are you sure you want to rename '${snippetName}'?`;
+        const title = `Rename '${snippetName}'`;
         const theme = this.props.darkTheme ? Classes.DARK : "";
 
         return (
             <Alert
-                className={theme}
+                className={classNames(theme, styles["fill-width"], "AAAAAA")}
                 cancelButtonText="Cancel"
                 confirmButtonText="Rename"
                 intent={Intent.PRIMARY}
+                canOutsideClickCancel={true}
+                canEscapeKeyCancel={true}
                 isOpen={this.state.displayRenameAlert}
                 onCancel={onCancel}
-                onConfirm={deleteSnippet}
+                onConfirm={renameSnippet}
             >
                 <div>
                     <p>
                         <strong>{title}</strong>
                     </p>
                     <InputGroup
+                        autoFocus={true}
                         onChange={this.handleSnippetNameChange}
                         placeholder={snippetName}
                         value={this.state.newSnippetName}
@@ -198,7 +204,7 @@ export default class EditorPanel extends Component<IEditorProps, IEditorState> {
     }
 
     private onDeleteSnippetClicked = () => {
-        this.setState({displayDeleteAlert: true});
+        this.setState({ displayDeleteAlert: true });
     }
 
     private onEditSnippetClicked = () => {
@@ -206,7 +212,7 @@ export default class EditorPanel extends Component<IEditorProps, IEditorState> {
     }
 
     private onRenameSnippetClicked = () => {
-        this.setState({displayRenameAlert: true});
+        this.setState({ displayRenameAlert: true });
     }
 
     private getEditorTheme = (): string => {

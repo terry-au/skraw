@@ -29,6 +29,7 @@
         "react-scripts": "2.1.3",
         "redux-logger": "^3.0.6",
         "redux-starter-kit": "^0.4.3",
+        "tslint-blueprint": "^0.1.0",
         "typescript": "3.2.4"
     },
     "scripts": {

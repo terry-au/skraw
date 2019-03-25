@@ -9505,6 +9505,11 @@ tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.9.3.tgz#d7e4dd79245d85428c4d7e4822a79917954ca286"
 
+tslint-blueprint@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/tslint-blueprint/-/tslint-blueprint-0.1.0.tgz#b5b6e1c8b18dba5a454fa7905ac75115e7284afd"
+  integrity sha1-tbbhyLGNulpFT6eQWsdRFecoSv0=
+
 tslint-loader@^3.5.4:
   version "3.5.4"
   resolved "https://registry.yarnpkg.com/tslint-loader/-/tslint-loader-3.5.4.tgz#052af7f0772434451ea1b247bb55407f878a4c40"

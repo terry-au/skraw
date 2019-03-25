@@ -1,5 +1,5 @@
 {
-    "extends": ["tslint:recommended", "tslint-react"],
+    "extends": ["tslint:recommended", "tslint-react", "tslint-blueprint"],
     "linterOptions": {
         "exclude": [
             "src/serviceWorker.ts"
@@ -12,6 +12,9 @@
             ]
         },
         "jsx-wrap-multiline": true,
+        "jsx-no-bind": true,
+        "jsx-no-lambda": true,
+        "jsx-self-close": true,
         "new-parens": true,
         "no-arg": true,
         "no-bitwise": true,

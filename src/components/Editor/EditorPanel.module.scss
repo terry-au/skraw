@@ -17,3 +17,13 @@
         display: none !important;
     }
 }
+
+.fill-width {
+    & :global .bp3-alert-body {
+        width: 100%;
+
+        & :global .bp3-alert-contents {
+            width: 100%;
+        }
+    }
+}

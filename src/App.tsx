@@ -66,6 +66,7 @@ class App extends React.Component<IAppProps, IAppState> {
                         height={this.state.editorHeight}
                         onSnippetDidUpdate={this.onSnippetDidUpdate}
                         onSnippetWasDeleted={this.onDeleteSnippet}
+                        onSnippetWasRenamed={this.onRenameSnippet}
                         snippet={this.state.snippet}
                     />
                 </ResizeSensor>
@@ -124,6 +125,14 @@ class App extends React.Component<IAppProps, IAppState> {
     private onDeleteSnippet = (snippet: ISnippet) => {
         this.setState({snippet: null});
         this.props.onDeleteSnippet!(snippet);
+    }
+
+    private onRenameSnippet = (snippet: ISnippet, name: string) => {
+        const renamedSnippet = {
+            ...snippet,
+            title: name,
+        };
+        this.props.saveSnippetToStore!(renamedSnippet);
     }
 
     private onSnippetDidUpdate = (snippet: ISnippet) => {
