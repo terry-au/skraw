@@ -29,7 +29,6 @@ interface ILanguage {
     id: string;
 }
 
-
 interface ISnippetCreatorState {
     isDisplayed: boolean;
     language: any;
@@ -50,8 +49,6 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
         const languages = monaco.languages.getLanguages();
         const lang = this.state.language;
 
-        this.printMsg(lang);
-
         const languageList = (
             <Select
                 items={languages}
@@ -62,7 +59,7 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
                 popoverProps={{ popoverClassName: styles.selector }}
             >
                 <Button
-                    icon="film"
+                    icon="code"
                     rightIcon="caret-down"
                     text={lang ? `${this.getName(lang)}` : "Language"}
                     disabled={false}
@@ -70,17 +67,10 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
             </Select>
         );
 
-        const eq = (
-            <Menu>
-                {languages.map((language, i) => <MenuItem text={language.id} key={i} />)}
-            </Menu>
-        );
-
         const snippetDetails = (
             <InputGroup
-                // disabled={false}
                 large={true}
-                leftIcon="code"
+                leftIcon="edit"
                 // onChange={this.selectLanguage}
                 placeholder="Snippet Name..."
                 // value={"aaa"}
@@ -92,7 +82,7 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
             <Dialog
                 className={""}
                 icon="code-block"
-                onClose={this.handleAction}
+                onClose={this.handleDisplay}
                 title="New Snippet"
                 isOpen={this.state.isDisplayed}
             >
@@ -103,11 +93,11 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
                     <div className={Classes.DIALOG_FOOTER_ACTIONS}>
                         <Button
                             intent={Intent.PRIMARY}
-                            onClick={this.handleAction}
+                            onClick={this.handleDisplay}
                         >
                             Add
                         </Button>
-                        <Button onClick={this.handleAction}>Cancel</Button>
+                        <Button onClick={this.handleDisplay}>Cancel</Button>
                     </div>
                 </div>
             </Dialog>
@@ -122,7 +112,7 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
                 position={PopoverPosition.RIGHT_TOP}
                 isOpen={this.state.isDisplayed}
             >
-                <Button className={styles.add} minimal={true} icon="insert" onClick={this.handleAction} />
+                <Button className={styles.add} minimal={true} icon="insert" onClick={this.handleDisplay} />
                 <div key="text">
                     <H5>New Snippet</H5>
                     {snippetDetails}
@@ -134,7 +124,7 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
                         <Button
                             className={Classes.POPOVER_DISMISS}
                             style={{ marginLeft: 10 }}
-                            onClick={this.handleAction}
+                            onClick={this.handleDisplay}
                         >
                             Cancel
                         </Button>
@@ -145,16 +135,11 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
 
         return (
             <div>
-                <Button className={styles.add} minimal={true} icon="insert" onClick={this.handleAction} />
+                <Button className={styles.add} minimal={true} icon="insert" onClick={this.handleDisplay} />
                 {newSnippetDialog}
                 {/* {newSnippetPopover} */}
             </div>
         );
-    }
-
-    private printMsg(msg: any) {
-        // tslint:disable-next-line:no-console
-        console.info(msg);
     }
 
     private getName(language: ILanguage) {
@@ -164,11 +149,7 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
     private filterLanguage = (query, lang, index, exactMatch) => {
         const target = _.uniq([lang.id, ...lang.aliases.map((l: string) => l.toLowerCase())]);
         const normalizedTitle = this.getName(lang).toLowerCase();
-        // this.printMsg(target);
-        this.printMsg(exactMatch);
-
         const normalizedQuery = query.toLowerCase();
-        // ${normalizedTitle}
 
         if (exactMatch) {
             return normalizedTitle === normalizedQuery; // _.includes(target, normalizedQuery);
@@ -208,7 +189,7 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
         );
     }
 
-    private handleAction = () => this.setState({ isDisplayed: !this.state.isDisplayed });
+    private handleDisplay = () => this.setState({ isDisplayed: !this.state.isDisplayed });
 
     private selectLanguage = (lang: any) => {
         this.setState({ language: lang });
