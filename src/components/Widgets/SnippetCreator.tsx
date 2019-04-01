@@ -1,17 +1,17 @@
 import {
-  AnchorButton,
-  Button,
-  Classes,
-  Dialog,
-  H5,
-  InputGroup,
-  Intent,
-  Menu,
-  MenuItem,
-  Popover,
-  PopoverPosition,
-  Position,
-  Tooltip,
+    AnchorButton,
+    Button,
+    Classes,
+    Dialog,
+    H5,
+    InputGroup,
+    Intent,
+    Menu,
+    MenuItem,
+    Popover,
+    PopoverPosition,
+    Position,
+    Tooltip,
 } from "@blueprintjs/core";
 import { Select } from "@blueprintjs/select";
 import * as _ from "lodash";
@@ -23,8 +23,16 @@ interface ISnippetCreatorProps {
     className?: string;
 }
 
+interface ILanguage {
+    aliases: string[];
+    extensions: string[];
+    id: string;
+}
+
+
 interface ISnippetCreatorState {
     isDisplayed: boolean;
+    language: any;
 }
 
 export default class SnippetCreator extends Component<ISnippetCreatorProps, ISnippetCreatorState> {
@@ -34,110 +42,113 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
 
         this.state = {
             isDisplayed: false,
+            language: null,
         };
     }
 
     public render() {
         const languages = monaco.languages.getLanguages();
+        const lang = this.state.language;
+
+        this.printMsg(lang);
 
         const languageList = (
-          <Select
-              items={languages}
-              itemRenderer={this.renderLanguageItems}
-              itemPredicate={this.filterLanguage}
-              onItemSelect={this.selectLanguage}
-              noResults={<MenuItem disabled={true} text="No results." />}
-              popoverProps={{minimal: true}}
-          >
-              <Button
-                  icon="film"
-                  rightIcon="caret-down"
-                  text={"aaaa"}
-                  disabled={false}
-              />
-          </Select>
+            <Select
+                items={languages}
+                itemRenderer={this.renderLanguageItems}
+                itemPredicate={this.filterLanguage}
+                onItemSelect={this.selectLanguage}
+                noResults={<MenuItem disabled={true} text="No results." />}
+                popoverProps={{ popoverClassName: styles.selector }}
+            >
+                <Button
+                    icon="film"
+                    rightIcon="caret-down"
+                    text={lang ? `${this.getName(lang)}` : "Language"}
+                    disabled={false}
+                />
+            </Select>
         );
 
         const eq = (
-          <Menu>
-              {languages.map((lang, i) => <MenuItem text={lang.id} key={i} />)}
-          </Menu>
+            <Menu>
+                {languages.map((language, i) => <MenuItem text={language.id} key={i} />)}
+            </Menu>
         );
 
-        const permissionsMenu = (
-          <Popover
-              content={eq}
-              disabled={false}
-              position={Position.BOTTOM_RIGHT}
-          >
-              <Button disabled={false} minimal={true} rightIcon="caret-down">
-                  Language
-              </Button>
-          </Popover>
-      );
-        return (
-          <div>
-              {languageList}
+        const snippetDetails = (
+            <InputGroup
+                // disabled={false}
+                large={true}
+                leftIcon="code"
+                // onChange={this.selectLanguage}
+                placeholder="Snippet Name..."
+                // value={"aaa"}
+                rightElement={languageList}
+            />
+        );
 
-              <Button className={styles["add-button"]} minimal={true} icon="insert" onClick={this.handleAction}/>
-              <Dialog
-                  className={""}
-                  icon="insert"
-                  onClose={this.handleAction}
-                  title="New Snippet"
-                  isOpen={this.state.isDisplayed}
-              >
-                  <div className={Classes.DIALOG_BODY}>
-                      <p>
-                          Add snippet
-                      </p>
-                  </div>
-                  <div className={Classes.DIALOG_FOOTER}>
-                      <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-                          <Button
-                              intent={Intent.PRIMARY}
-                              onClick={this.handleAction}
-                          >
-                              Add
-                          </Button>
-                          <Button onClick={this.handleAction}>Cancel</Button>
-                      </div>
-                  </div>
-              </Dialog>
-
-              {// tslint:disable-next-line: jsx-no-multiline-js
-              /* <Popover
-                  popoverClassName={Classes.POPOVER_CONTENT_SIZING}
-                  portalClassName="foo"
-                  enforceFocus={false}
-                  position={PopoverPosition.RIGHT_TOP}
-                  isOpen={false} // this.state.isDisplayed
-              >
-                  <div key="text">
-                      <H5>New Snippet</H5>
-                      <InputGroup
-                          disabled={false}
-                          large={false}
-                          placeholder="Snippet Name"
-                          rightElement={languageList}
-                          small={false}
-                      />
-
-                      <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 15 }}>
-                          <Button
-                            className={Classes.POPOVER_DISMISS}
-                            style={{ marginRight: 10 }}
+        const newSnippetDialog = (
+            <Dialog
+                className={""}
+                icon="code-block"
+                onClose={this.handleAction}
+                title="New Snippet"
+                isOpen={this.state.isDisplayed}
+            >
+                <div className={Classes.DIALOG_BODY}>
+                    {snippetDetails}
+                </div>
+                <div className={Classes.DIALOG_FOOTER}>
+                    <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+                        <Button
+                            intent={Intent.PRIMARY}
                             onClick={this.handleAction}
-                          >
-                              Cancel
-                          </Button>
-                          <Button intent={Intent.DANGER} className={Classes.POPOVER_DISMISS}>
-                              Add
-                          </Button>
-                      </div>
-                  </div>,
-              </Popover> */}
-          </div>
+                        >
+                            Add
+                        </Button>
+                        <Button onClick={this.handleAction}>Cancel</Button>
+                    </div>
+                </div>
+            </Dialog>
+        );
+
+        const newSnippetPopover = (
+            <Popover
+                popoverClassName={Classes.POPOVER_CONTENT_SIZING}
+                // popoverClassName={styles.foo}
+                // portalClassName={styles.foo}
+                enforceFocus={false}
+                position={PopoverPosition.RIGHT_TOP}
+                isOpen={this.state.isDisplayed}
+            >
+                <Button className={styles.add} minimal={true} icon="insert" onClick={this.handleAction} />
+                <div key="text">
+                    <H5>New Snippet</H5>
+                    {snippetDetails}
+
+                    <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 15 }}>
+                        <Button intent={Intent.PRIMARY} className={Classes.POPOVER_DISMISS}>
+                            Add
+                        </Button>
+                        <Button
+                            className={Classes.POPOVER_DISMISS}
+                            style={{ marginLeft: 10 }}
+                            onClick={this.handleAction}
+                        >
+                            Cancel
+                        </Button>
+                    </div>
+                </div>,
+            </Popover>
+        );
+
+        return (
+            <div>
+                <Button className={styles.add} minimal={true} icon="insert" onClick={this.handleAction} />
+                {newSnippetDialog}
+                {/* {newSnippetPopover} */}
+            </div>
         );
     }
 
@@ -146,9 +157,13 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
         console.info(msg);
     }
 
+    private getName(language: ILanguage) {
+        return _.get(language, "aliases.0", language.id);
+    }
+
     private filterLanguage = (query, lang, index, exactMatch) => {
         const target = _.uniq([lang.id, ...lang.aliases.map((l: string) => l.toLowerCase())]);
-        const normalizedTitle = _.get(lang, "aliases.0", lang.id).toLowerCase();
+        const normalizedTitle = this.getName(lang).toLowerCase();
         // this.printMsg(target);
         this.printMsg(exactMatch);
 
@@ -180,7 +195,7 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
     }
 
 
-    private renderMenu = ({items, itemsParentRef, query, renderItem}) => {
+    private renderMenu = ({ items, itemsParentRef, query, renderItem }) => {
         const renderedItems = items.map(renderItem).filter((item) => item != null);
         return (
             <Menu ulRef={itemsParentRef}>
@@ -193,10 +208,10 @@ export default class SnippetCreator extends Component<ISnippetCreatorProps, ISni
         );
     }
 
-    private handleAction = () => this.setState({isDisplayed: !this.state.isDisplayed});
+    private handleAction = () => this.setState({ isDisplayed: !this.state.isDisplayed });
 
     private selectLanguage = (lang: any) => {
-      alert("selected new language");
+        this.setState({ language: lang });
     }
 
 }

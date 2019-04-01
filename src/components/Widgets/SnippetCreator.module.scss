@@ -1,4 +1,14 @@
-.add-button {
-  float: right;
-  margin: 0;
+.add {
+    float: right;
+    margin: 0;
+}
+
+.selector {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.foo {
+    max-width: 550px;
+    padding: 20px;
 }
